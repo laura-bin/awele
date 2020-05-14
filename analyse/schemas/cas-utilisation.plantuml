@@ -1,0 +1,17 @@
+@startuml usecase
+!include ./theme.plantuml
+left to right direction
+:Joueur: as J
+
+rectangle AWELE {
+    (Consulter les scores) <<optionnel>> as view_scores
+    (Jouer une partie) as play
+    (Choisir la difficulé) as choose_difficulty
+    (Enregistrer un score) <<optionnel>> as add_score
+
+    J -- play
+    J -- view_scores
+    play ..> choose_difficulty : include
+    play ..> add_score : extends
+}
+@enduml

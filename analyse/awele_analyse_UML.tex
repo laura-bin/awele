@@ -34,14 +34,16 @@
     \addcontentsline{toc}{section}{\nameref{sec:intro}}
 
     \paragraph{}
-    %Ce travail présente l'analyse UML du jeu awélé réalisée dans le cadre du cours de Programmation orientée objet. L'awélé est un jeu de semailles d'origine africaine dont le but est de récolter le maximum de graines sur un plateau composé de 12 trous. Les règles de ce jeu sont détaillées dans la première section de ce travail.
+    Ce travail présente l'analyse UML du jeu awélé réalisée dans le cadre du cours de Programmation orientée objet. L'awélé est un jeu de semailles d'origine africaine dont le but est de récolter le maximum de graines sur un plateau composé de 12 trous. Les règles de ce jeu sont détaillées dans la première section de ce travail.
 
     \paragraph{}
-    %La première version de ce jeu sera une application en console codée en Java. Le joueur jouera face à la machine en mode facile (aléatoire) ou difficile (intelligence artificielle). Cette analyse présente la première version du jeu avec la machine en mode aléatoire.
+    La première version de ce jeu sera une application en console codée en Java. Le joueur jouera face à la machine en mode facile (aléatoire) ou difficile (intelligence artificielle). Cette analyse présente la première version du jeu avec la machine en mode aléatoire.
 
     \paragraph{}
-    %La seconde version du jeu consistera à ajouter une interface graphique avec JavaFX. Pour cette raison, la première version du jeu se concentrera sur la partie logique. Pour la partie graphique, qui n'est pas destinée à être conservée, je développerai de manière sommaire les vues nécessaires : le menu de choix de difficulté et l'affichage du plateau de jeu comme dans la figure suivante.
+    La deuxième version du jeu consistera à ajouter une interface graphique avec JavaFX. Pour cette raison, la première version du jeu se concentrera sur la partie logique. Pour la partie graphique, qui n'est pas destinée à être conservée, je développerai de manière sommaire les vues nécessaires dans une classe générale (ConsoleUI).
 
+    \paragraph{}
+    V3 : enregistrement des scores
     
     \paragraph{}
     %Il reprend les schémas suivants :
@@ -97,18 +99,35 @@
     \section{Diagramme de cas d'utilisation}
 
     \paragraph{}
+    Ce diagramme expose les cas d'utilisation du jeu \textbf{AWELE} par un \textbf{joueur} :
     \begin{itemize}
-        \item jouer une partie
-        \item choisir la difficulté
-        \item consulter les scores
-        \item enregistrer un score
+        \item Jouer une partie
+        \item Choisir la difficulté
+        \item Enregistrer un score
+        \item Consulter les scores
     \end{itemize}
+
+    \begin{figure}[H]
+        \centering
+        \includegraphics[width=.75\linewidth]{./schemas/cas-utilisation/usecase.png}
+        \caption{Diagramme de cas d'utilisation}
+    \end{figure}
+
+    \paragraph{}
+    La cas d'utilisation principal est évidemment de \textbf{jouer une partie}. Jouer une partie suppose de \textbf{choisir la difficulté} de celle-ci (relation d'inclusion) : à chaque fois que le joueur lance une nouvelle partie, le jeu lui demande s'il souhaite jouer en mode normal ou difficile.
+
+    \paragraph{}
+    En fin de partie et selon certaines conditions, le  joueur pourra ou non \textbf{enregistrer son score} (relation d'extension).
+
+    \paragraph{}
+    Le joueur aura enfin la possibilité de consulter les scores précédemment enregistrés. Cette fonctionnalité sera développée dans la troisième version du projet avec l'implémentation d'une liaison avec une base de données locale.
+
 
     \newpage
     \section{Diagramme de séquence système}
     
     \paragraph{}
-    Diagramme de séquence global qui reprend les références aux diagrammes de séquences développés plus loi : utilisateur joue et machine joue.
+    Diagramme de séquence global qui reprend les références aux diagrammes de séquences développés plus loin : utilisateur joue et machine joue.
 
 
     \begin{itemize}
@@ -129,9 +148,9 @@
     Uniquement les classes nécessaires à la logique du jeu -> diagramme plus détaillé (MVC, etc) = classes de conception
 
     \begin{itemize}
-        \item Partie (singleton, contrôleur) : 1 plateau, 40 graines, 2 joueurs, bool terminé/en cours
+        \item Partie (contrôleur) : 1 plateau, 40 graines, 2 joueurs, bool terminé/en cours
         \item Plateau : 8 trous
-        \item Trou : appartient à un joueur, nb graines, prendre les graines, ajouter une graine
+        \item Trou : appartient à un joueur, nb graines, prendre les graines, ajouter une graine // -> pas de classes mais deux tableaux d'entiers
         \item Joueur virtuel : Joueur aléatoire ou joueur intelligent (héritage)
         \item 
     \end{itemize}
