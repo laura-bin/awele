@@ -9,17 +9,17 @@ import java.util.Set;
 public enum MenuChoice {
 
     SCORES ("High scores",
-            Set.of("h", "high", "score", "scores", "high scores")),
+            "h", "high", "score", "scores", "high scores"),
     PLAY ("Play new game",
-            Set.of("p", "play", "new", "game", "play new game")),
+            "p", "play", "new", "game", "play new game"),
     NORMAL_MODE("Normal mode",
-            Set.of("n", "normal", "normal mode")),
+            "n", "normal", "normal mode"),
     HARD_MODE("Hard mode",
-            Set.of("h", "hard", "hard mode")),
+            "h", "hard", "hard mode"),
     BACK ("Back to main menu",
-            Set.of("b", "back", "back to main menu", "main", "main menu")),
+            "b", "back", "back to main menu", "main", "main menu"),
     QUIT ("Quit",
-            Set.of("q", "quit"));
+            "q", "quit");
 
     /**
      * Base text to display in the user interface
@@ -36,9 +36,9 @@ public enum MenuChoice {
      * @param text
      * @param validChoices
      */
-    MenuChoice(String text, Set<String> validChoices) {
+    MenuChoice(String text, String... validChoices) {
         this.text = text;
-        this.validInputs = validChoices;
+        this.validInputs = Set.of(validChoices);
     }
 
     /**
@@ -54,9 +54,8 @@ public enum MenuChoice {
      * @return boolean
      */
     public boolean isInputValid(String playerInput) {
-        String input = playerInput.toLowerCase();
         for (String expected : validInputs) {
-            if (input.compareTo(expected) == 0) return true;
+            if (playerInput.equalsIgnoreCase(expected)) return true;
         }
         return false;
     }

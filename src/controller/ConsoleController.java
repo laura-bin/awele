@@ -1,6 +1,6 @@
 package controller;
 
-import view.ConsoleUI;
+import view.Console;
 
 import java.util.Scanner;
 
@@ -10,68 +10,40 @@ import java.util.Scanner;
  */
 public class ConsoleController {
 
-    ConsoleUI console = new ConsoleUI();
+    Console console = new Console();
 
     /**
-     * Starts the application :
-     * - displays a welcome message
-     * - calls the main menu
+     * Starts the application and manages teh navigation
      */
     public void start() {
+        MenuChoice playerChoice = MenuChoice.BACK;
+
         console.displayWelcomeMessage();
-        mainMenu();
+        while (playerChoice != MenuChoice.QUIT) {
+            switch(playerChoice) {
+                case PLAY:
+                    playerChoice = menu(Menu.DIFFICULTY);
+                    // TODO
+                    break;
+                case SCORES:
+                    console.displayScores();
+                    playerChoice = menu(Menu.GO_BACK);
+                    break;
+                case BACK:
+                    playerChoice = menu(Menu.MAIN);
+            }
+        }
+        System.exit(0);
     }
 
     /**
-     * Displays main menu choices to call the next game action :
-     * - view scores
-     * - play new game
-     * - quit
-     * and call the next action following the player's choice
+     * Displays the right menu and sends back the player's menu choice
+     * @param menu
+     * @return a MenuChoice corresponding to the player's input
      */
-    private void mainMenu() {
-        MenuChoice playerChoice;
-
-        console.displayMainMenu();
-
-        switch (waitPlayerChoice(Menu.MAIN)) {
-            case SCORES:
-                console.displayScores();
-                goBackMenu();
-                break;
-            case PLAY:
-                console.displayNewGameMenu();
-                switch (waitPlayerChoice(Menu.DIFFICULTY)) {
-                    case NORMAL_MODE:
-                        // TODO NORMAL MODE GAME
-                        System.out.println("normal mode game");
-                        break;
-                    case HARD_MODE:
-                        // TODO HARD MODE GAME
-                        System.out.println("Feature in development");
-                        goBackMenu();
-                }
-                break;
-            case QUIT:
-                System.exit(0);
-        }
-    }
-
-    /**
-     * Displays the go back menu :
-     * - back to main menu
-     * - quit
-     * calls the next action following the player's choice
-     */
-    private void goBackMenu() {
-        console.displayGoBackMenu();
-        switch (waitPlayerChoice(Menu.GO_BACK)) {
-            case BACK:
-                mainMenu();
-                break;
-            case QUIT:
-                System.exit(0);
-        }
+    private MenuChoice menu(Menu menu) {
+        console.displayMenu(menu);
+        return waitPlayerChoice(menu);
     }
 
     /**
@@ -83,7 +55,7 @@ public class ConsoleController {
         Scanner sc = new Scanner(System.in);
         String playerInput;
 
-        while (true) {
+        while (sc.hasNext()) {
             playerInput = sc.nextLine();
 
             for (MenuChoice choice : menu.getChoices()) {
@@ -93,6 +65,7 @@ public class ConsoleController {
             }
             System.err.println(String.format("%s is not a valid choice", playerInput));
         }
+        return MenuChoice.QUIT;
     }
 
 }
