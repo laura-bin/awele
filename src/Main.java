@@ -1,9 +1,10 @@
-import controller.ConsoleController;
+import controller.console.ConsoleGameController;
 
 public class Main {
     public static void main(String[] args) {
 
-        ConsoleController cc = new ConsoleController();
+        ConsoleGameController cc = new ConsoleGameController();
         cc.start();
+
     }
 }

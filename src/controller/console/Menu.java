@@ -1,4 +1,4 @@
-package controller;
+package controller.console;
 
 import java.util.List;
 
@@ -6,28 +6,31 @@ import java.util.List;
  * Menus of the application and list of possible choices for each
  */
 public enum Menu {
-    MAIN ("= = = = = = =  MAIN MENU  = = = = = = =",
+    MAIN("= = = = = = =  MAIN MENU  = = = = = = =",
             MenuChoice.SCORES, MenuChoice.PLAY, MenuChoice.QUIT),
-    DIFFICULTY ("= = = = = = =  NEW  GAME  = = = = = = =",
+    DIFFICULTY("= = = = = = =  NEW  GAME  = = = = = = =",
             MenuChoice.NORMAL_MODE, MenuChoice.HARD_MODE, MenuChoice.BACK),
-    GO_BACK ("= = = = = = = = = = = = = = = = = = = =",
+    START_GAME("Do you want to start the game ?",
+            MenuChoice.YES, MenuChoice.NO),
+    NOT_YET_IMPLEMENTED("This functionality is not yet implemented",
+            MenuChoice.BACK, MenuChoice.QUIT),
+    GO_BACK("= = = = = = = = = = = = = = = = = = = =",
             MenuChoice.BACK, MenuChoice.QUIT);
 
 
     /**
      * Title to display above the menu choices
      */
-    private String title;
+    private final String title;
 
     /**
      * List of choices that can be selected in the current menu
      */
-    private List<MenuChoice> choices;
-
-
+    private final List<MenuChoice> choices;
 
     /**
      * Private constructor
+     *
      * @param choices
      */
     Menu(String title, MenuChoice... choices) {

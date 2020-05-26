@@ -1,4 +1,4 @@
-package controller;
+package controller.console;
 
 import java.util.Set;
 
@@ -8,31 +8,36 @@ import java.util.Set;
  */
 public enum MenuChoice {
 
-    SCORES ("High scores",
+    SCORES("High scores",
             "h", "high", "score", "scores", "high scores"),
-    PLAY ("Play new game",
+    PLAY("Play new game",
             "p", "play", "new", "game", "play new game"),
     NORMAL_MODE("Normal mode",
             "n", "normal", "normal mode"),
     HARD_MODE("Hard mode",
             "h", "hard", "hard mode"),
-    BACK ("Back to main menu",
+    YES("Yes",
+            "y", "yes"),
+    NO("No",
+            "n", "no"),
+    BACK("Back to main menu",
             "b", "back", "back to main menu", "main", "main menu"),
-    QUIT ("Quit",
+    QUIT("Quit",
             "q", "quit");
 
     /**
      * Base text to display in the user interface
      */
-    private String text;
+    private final String text;
 
     /**
      * Valid inputs to select the menu choice
      */
-    private Set<String> validInputs;
+    private final Set<String> validInputs;
 
     /**
      * Private constructor
+     *
      * @param text
      * @param validChoices
      */
@@ -50,6 +55,7 @@ public enum MenuChoice {
 
     /**
      * Checks if the player input correspond to the valid choices for a menu choice
+     *
      * @param playerInput
      * @return boolean
      */
