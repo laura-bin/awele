@@ -3,7 +3,7 @@ package controller;
 import model.GameBoard;
 import view.GameErrorMessage;
 import view.GameMessage;
-import view.ConsoleDisplay;
+import view.console.ConsoleDisplay;
 
 import java.util.InputMismatchException;
 import java.util.Scanner;

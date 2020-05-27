@@ -1,9 +1,10 @@
-package view;
+package view.console;
 
 import controller.Menu;
 import controller.MenuChoice;
-import controller.logic.GameStatus;
 import model.GameBoard;
+import view.GameErrorMessage;
+import view.GameMessage;
 
 import java.util.List;
 import java.util.concurrent.TimeUnit;

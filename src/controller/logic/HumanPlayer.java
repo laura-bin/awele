@@ -1,7 +1,6 @@
 package controller.logic;
 
 import controller.UIController;
-import controller.logic.Player;
 import view.GameErrorMessage;
 import view.GameMessage;
 
