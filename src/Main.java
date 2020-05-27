@@ -1,10 +1,11 @@
-import controller.console.ConsoleGameController;
+import controller.UIConsoleController;
+import controller.GameController;
 
 public class Main {
     public static void main(String[] args) {
 
-        ConsoleGameController cc = new ConsoleGameController();
-        cc.start();
+        GameController game = new GameController(new UIConsoleController());
+        game.start();
 
     }
 }

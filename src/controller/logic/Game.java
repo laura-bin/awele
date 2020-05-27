@@ -1,15 +1,13 @@
-package controller.game;
+package controller.logic;
 
-import controller.console.MenuChoice;
-import controller.game.player.HumanPlayer;
-import controller.game.player.Player;
-import controller.game.player.VirtualEasyPlayer;
+import controller.UIController;
+import controller.MenuChoice;
 import model.GameBoard;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class GameController {
+public class Game {
 
     private final GameBoard board;        // board of 2 rows of 6 houses + 2 stock houses
     private final List<Player> players;   // players controllers (number pickers)
@@ -21,7 +19,7 @@ public class GameController {
      *
      * @param humanStarts does the human player wants to start (boolean)
      */
-    public GameController(MenuChoice gameDifficulty, boolean humanStarts) {
+    public Game(MenuChoice gameDifficulty, boolean humanStarts) {
         this.board = new GameBoard();
 
         this.players = new ArrayList<>();

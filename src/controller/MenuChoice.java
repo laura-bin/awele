@@ -1,4 +1,4 @@
-package controller.console;
+package controller;
 
 import java.util.Set;
 

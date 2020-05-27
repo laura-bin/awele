@@ -1,8 +1,16 @@
 package view;
 
 public enum GameMessage {
+    WELCOME("= = = = = = = = = = = = = = = = = = = = = = = = = =\n" +
+            "= = = = = = =  WELCOME TO AWELE GAME  = = = = = = =\n" +
+            "= = = = = = = = = = = = = = = = = = = = = = = = = ="),
     PICK_HOUSE("Pick a house for sowing."),
-    IMPOSSIBLE("Impossible to play."); // end because no more move is possible
+    VIRTUAL_PLAYER_CHOICE("Virtual player picked house %d."),
+    IMPOSSIBLE("Impossible to play."),
+    WIN("You win !"),
+    DRAW("Draw : both players have collected the same amount of seeds."),
+    LOSE("Virtual player wins !"),
+    EMPTY("");
 
     /**
      * Message to display in the user interface
@@ -18,7 +26,7 @@ public enum GameMessage {
         this.text = text;
     }
 
-    public String getText() {
-        return text;
+    public String getText(Object... params) {
+        return String.format(text, params);
     }
 }

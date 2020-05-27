@@ -2,6 +2,7 @@ package view;
 
 public enum GameErrorMessage {
     INVALID_HOUSE("Invalid house, pick another one."),
+    INVALID_INPUT("%s is not a valid choice."),
     HOUSE_NOT_INT("You must pick an integer corresponding to the house position.");
 
     /**
@@ -18,7 +19,8 @@ public enum GameErrorMessage {
         this.text = text;
     }
 
-    public String getText() {
-        return text;
+    public String getText(Object... params) {
+        return String.format(text, params);
     }
+
 }

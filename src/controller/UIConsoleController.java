@@ -1,6 +1,5 @@
-package controller.console;
+package controller;
 
-import controller.game.GameStatus;
 import model.GameBoard;
 import view.GameErrorMessage;
 import view.GameMessage;
@@ -9,7 +8,7 @@ import view.ConsoleDisplay;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
-public class ConsoleController {
+public class UIConsoleController implements UIController {
 
     private final ConsoleDisplay console = new ConsoleDisplay();
 
@@ -19,6 +18,7 @@ public class ConsoleController {
      * @param menu for which the choice is needed
      * @return a MenuChoice corresponding to the player's input
      */
+    @Override
     public MenuChoice menu(Menu menu) {
         Scanner sc = new Scanner(System.in);
         String playerInput;
@@ -33,7 +33,7 @@ public class ConsoleController {
                     return choice;
                 }
             }
-            System.err.println(String.format("%s is not a valid choice", playerInput));
+            console.displayMessage(GameErrorMessage.INVALID_INPUT, playerInput);
         }
         return MenuChoice.QUIT;
     }
@@ -42,6 +42,7 @@ public class ConsoleController {
      * Wait an integer on the standard input
      * @return the house number picked by the human player
      */
+    @Override
     public int waitNumber() {
         Scanner sc = new Scanner(System.in);
         if (sc.hasNext()) {
@@ -56,32 +57,23 @@ public class ConsoleController {
         }
     }
 
-    public void displayWelcomeMessage() {
-        console.displayWelcomeMessage();
+    @Override
+    public void displayMessage(GameMessage message, Object... params) {
+        console.displayMessage(message, params);
     }
 
-    public void displayMessage(String message) {
-        console.displayMessage(message);
+    @Override
+    public void displayMessage(GameErrorMessage message, Object... params) {
+        console.displayMessage(message, params);
     }
 
-    public void displayMessage(GameMessage message) {
-        console.displayMessage(message);
-    }
-
-    public void displayMessage(GameStatus status) {
-        console.displayMessage(status);
-    }
-
-    public void displayMessage(GameErrorMessage errorMessage) {
-        console.displayMessage(errorMessage);
-    }
-
+    @Override
     public void displayBoard(GameBoard board) {
         console.displayBoard(board);
     }
 
-    public void displayVirtualPlayerPlaying() {
+    @Override
+    public void displayVirtualPlayerPlayingAnimation() {
         console.displayVirtualPlayerPlaying();
     }
-
 }

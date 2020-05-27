@@ -1,8 +1,8 @@
 package view;
 
-import controller.console.Menu;
-import controller.console.MenuChoice;
-import controller.game.GameStatus;
+import controller.Menu;
+import controller.MenuChoice;
+import controller.logic.GameStatus;
 import model.GameBoard;
 
 import java.util.List;
@@ -13,15 +13,6 @@ import java.util.concurrent.TimeUnit;
  * - displays the menus, boards, scores
  */
 public class ConsoleDisplay {
-
-    /**
-     * Displays a welcome message at the start of the app
-     */
-    public void displayWelcomeMessage() {
-        System.out.println("= = = = = = = = = = = = = = = = = = = =");
-        System.out.println("= = = =  WELCOME TO AWELE GAME  = = = =");
-        System.out.println("= = = = = = = = = = = = = = = = = = = =");
-    }
 
     /**
      * Displays the menu choices for a given menu
@@ -83,37 +74,19 @@ public class ConsoleDisplay {
     /**
      * Displays a message on the standard output
      *
-     * @param message String message
+     * @param message GameMessage message
      */
-    public void displayMessage(String message) {
-        System.out.println(message);
-    }
-
-    /**
-     * Displays a message on the standard output
-     *
-     * @param message GameMessage enum
-     */
-    public void displayMessage(GameMessage message) {
-        System.out.println(message.getText());
-    }
-
-    /**
-     * Displays a message on the standard output
-     *
-     * @param status GameStatus enum
-     */
-    public void displayMessage(GameStatus status) {
-        System.out.println(status.getText());
+    public void displayMessage(GameMessage message, Object... params) {
+        System.out.println(message.getText(params));
     }
 
     /**
      * Displays an error message on the standard output
      *
-     * @param errorMessage GameErrorMessage enum
+     * @param message GameErrorMessage enum
      */
-    public void displayMessage(GameErrorMessage errorMessage) {
-        System.err.println(errorMessage.getText());
+    public void displayMessage(GameErrorMessage message, Object... params) {
+        System.err.println(message.getText(params));
     }
 
     /**
