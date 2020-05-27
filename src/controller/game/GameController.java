@@ -11,8 +11,8 @@ import java.util.List;
 
 public class GameController {
 
-    private GameBoard board;        // board of 2 rows of 6 houses + 2 stock houses
-    private List<Player> players;   // players controllers (number pickers)
+    private final GameBoard board;        // board of 2 rows of 6 houses + 2 stock houses
+    private final List<Player> players;   // players controllers (number pickers)
     private int activePlayer;       // active player number : 0 for human player and 1 for virtual player
     private GameStatus status;      // game status in progress / end
 
@@ -118,39 +118,50 @@ public class GameController {
 
         // does the last house belong to the opponent ?
         if (board.getHouseIndexes(opponent).contains(houseToUpdateIndex)) {
-            List<Integer> newHouses = board.getHouses();
-            int seedsToAdd = 0;
+            captureSeeds(houseToUpdateIndex, opponent);
+        }
 
-            while (houseToUpdateIndex >= board.getStartIndex(opponent)) {
-                int houseValue = newHouses.get(houseToUpdateIndex);
+        switchActivePlayer();
+    }
 
-                // stop if the house doesn't contain 2 or 3 seeds
-                if (houseValue > 3 || houseValue < 2) break;
-                else {
-                    seedsToAdd += houseValue;
-                    newHouses.set(houseToUpdateIndex, 0);
-                }
+    /**
+     * Capture seeds in the opponent's houses
+     * @param fromHouseIndex last house index where a seed was sowed
+     * @param opponent opponent number
+     */
+    private void captureSeeds(int fromHouseIndex, int opponent) {
+        List<Integer> newHouses = board.getHouses();
+        int seedsToAdd = 0;
 
-                houseToUpdateIndex--;
+        while (fromHouseIndex >= board.getStartIndex(opponent)) {
+            int houseValue = newHouses.get(fromHouseIndex);
+
+            // stop if the house doesn't contain 2 or 3 seeds
+            if (houseValue > 3 || houseValue < 2) break;
+            else {
+                seedsToAdd += houseValue;
+                newHouses.set(fromHouseIndex, 0);
             }
 
-            // if the opponent isn't starved by the capture, the capture is allowed
-            if (!isStarved(opponent, newHouses)) {
-                board.updateHouses(newHouses);
-                board.addToStock(activePlayer, seedsToAdd);
+            fromHouseIndex--;
+        }
 
-                // check if there is a winner
-                if (board.getStock(0) > 24) status = GameStatus.END_WIN;
-                if (board.getStock(1) > 24) status = GameStatus.END_LOSE;
-                if (board.getStock(0) == 24 & board.getStock(1) == 24) status = GameStatus.END_DRAW;
-            }
+        // if the opponent isn't starved by the capture, the capture is allowed
+        if (!isStarved(opponent, newHouses)) {
+            board.updateHouses(newHouses);
+            board.addToStock(activePlayer, seedsToAdd);
+
+            // check if there is a winner
+            if (board.getStock(0) > 24) status = GameStatus.END_WIN;
+            if (board.getStock(1) > 24) status = GameStatus.END_LOSE;
+            if (board.getStock(0) == 24 & board.getStock(1) == 24) status = GameStatus.END_DRAW;
         }
     }
 
     /**
      * Switches the active player number
      */
-    public void switchActivePlayer() {
+    private void switchActivePlayer() {
         activePlayer = getOpponentNumber();
     }
 
@@ -225,7 +236,7 @@ public class GameController {
      * @param houseIndex index of the house in the board array houses
      * @return house number that can be picked by a player between 1 and nHouses
      */
-    public int convertHouseIndexToHouseNumber(int houseIndex) {
+    private int convertHouseIndexToHouseNumber(int houseIndex) {
         return houseIndex - GameBoard.N_HOUSES_PER_PLAYER * activePlayer + 1;
     }
 
@@ -239,7 +250,7 @@ public class GameController {
      * @param pickedHouseNumber house number picked by a player between 1 and nHouses
      * @return index of the house in the board array houses
      */
-    public int convertPickedHouseToHouseIndex(int pickedHouseNumber) {
+    private int convertPickedHouseToHouseIndex(int pickedHouseNumber) {
         return pickedHouseNumber + GameBoard.N_HOUSES_PER_PLAYER * activePlayer - 1;
     }
 }

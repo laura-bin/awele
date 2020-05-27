@@ -18,8 +18,8 @@ public class GameBoard {
     public static final int N_PLAYERS = 2;              // number of players
     public static final int N_HOUSES_PER_PLAYER = 6;    // number of houses belonging to each player
 
-    private List<Integer> houses;                       // houses (firsts belongs to player 0 and lasts to player 1)
-    private List<Integer> stocks;                       // seed stocks (0 belongs to player 0 & 1 belongs to player 1)
+    private final List<Integer> houses;                       // houses (firsts belongs to player 0 and lasts to player 1)
+    private final List<Integer> stocks;                       // seed stocks (0 belongs to player 0 & 1 belongs to player 1)
 
     /**
      * Constructor
@@ -41,7 +41,7 @@ public class GameBoard {
 
     public List<Integer> getHousesValues(int player) {
         int start = getStartIndex(player);
-        return new ArrayList<>(houses.subList(start, start + N_HOUSES_PER_PLAYER));
+        return Collections.unmodifiableList(houses.subList(start, start + N_HOUSES_PER_PLAYER));
     }
 
     /**

@@ -11,7 +11,7 @@ import java.util.Scanner;
 
 public class ConsoleController {
 
-    private ConsoleDisplay console = new ConsoleDisplay();
+    private final ConsoleDisplay console = new ConsoleDisplay();
 
     /**
      * Displays the right menu, waits the player's input and checks if it's a valid choice for the current menu

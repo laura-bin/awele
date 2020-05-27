@@ -12,7 +12,7 @@ import java.util.List;
  */
 public class ConsoleGameController {
 
-    ConsoleController console = new ConsoleController();
+    private final ConsoleController console = new ConsoleController();
 
     /**
      * Starts the application and manages teh navigation
@@ -33,8 +33,6 @@ public class ConsoleGameController {
                             break;
                         case HARD_MODE:
                             playerChoice = console.menu(Menu.NOT_YET_IMPLEMENTED);
-                            break;
-                        default:
                             break;
                     }
                     break;
@@ -59,13 +57,11 @@ public class ConsoleGameController {
             if (eligibleHouses.isEmpty()) {
                 console.displayMessage(GameMessage.IMPOSSIBLE);
                 game.collectRemainingSeeds();
-                console.displayBoard(game.getGameBoard());
             } else {
                 int pickedHouseNumber = game.getActivePlayer().pickHouseForSowing(eligibleHouses, console);
                 game.sowSeeds(pickedHouseNumber);
-                console.displayBoard(game.getGameBoard());
-                game.switchActivePlayer();
             }
+            console.displayBoard(game.getGameBoard());
         }
 
         console.displayMessage(game.getStatus());
