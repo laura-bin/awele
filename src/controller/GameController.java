@@ -64,7 +64,7 @@ public class GameController {
         while (game.getStatus() == GameStatus.IN_PROGRESS) {
             List<Integer> eligibleHouses = game.getActivePlayerEligibleHouseNumbers();
             if (eligibleHouses.isEmpty()) {
-                ui.displayMessage(GameMessage.IMPOSSIBLE);
+                ui.displayMessage(GameMessage.IMPOSSIBLE_MOVE);
                 game.collectRemainingSeeds();
             } else {
                 int pickedHouseNumber = game.getActivePlayer().pickHouseForSowing(eligibleHouses, ui);

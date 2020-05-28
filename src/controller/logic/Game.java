@@ -1,6 +1,5 @@
 package controller.logic;
 
-import controller.UIController;
 import controller.MenuChoice;
 import model.GameBoard;
 

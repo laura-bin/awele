@@ -6,7 +6,7 @@ public enum GameMessage {
             "= = = = = = = = = = = = = = = = = = = = = = = = = ="),
     PICK_HOUSE("Pick a house for sowing."),
     VIRTUAL_PLAYER_CHOICE("Virtual player picked house %d."),
-    IMPOSSIBLE("Impossible to play."),
+    IMPOSSIBLE_MOVE("Impossible to play."),
     WIN("You win !"),
     DRAW("Draw : both players have collected the same amount of seeds."),
     LOSE("Virtual player wins !"),
