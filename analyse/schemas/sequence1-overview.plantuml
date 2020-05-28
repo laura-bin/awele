@@ -1,0 +1,34 @@
+@startuml sequence1-overview
+!include ./theme.plantuml
+
+actor Player as P
+participant "main\n:Main" as MAIN
+participant "display\n:ConsoleDisplay" as CD
+participant "ui\n:UIConsoleController\n:UIController" as UICTRL
+participant "gameController\n:GameContoller" as GCTRL
+
+
+P -> MAIN : run
+MAIN -> UICTRL : <<create>>
+activate UICTRL
+UICTRL -> CD : <<create>>
+activate CD
+MAIN -> GCTRL : <<create>>
+activate GCTRL
+MAIN -> GCTRL : start()
+GCTRL -> UICTRL : displayMessage(WELCOME)
+UICTRL -> CD : displayMessage(WELCOME)
+CD -> P : print(WELCOME)
+GCTRL -> UICTRL : menu(MAIN)
+UICTRL -> CD : displayMessage(MAIN)
+CD -> P : print(MAIN)
+
+alt
+    ref over P, GCTRL : player selects view scores
+else
+    ref over P, GCTRL : player selects play
+else
+    ref over P, GCTRL : player selects quit
+end
+
+@enduml

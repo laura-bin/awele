@@ -1,0 +1,61 @@
+@startuml sequence3-player-selects-normal
+!include ./theme.plantuml
+
+actor Player as P
+participant "display\n:ConsoleDisplay" as CD
+participant "ui\n:UIConsoleController\n:UIController" as UICTRL
+participant "gameController\n:GameContoller" as GCTRL
+participant "game\n:Game" as G
+participant "board\n:GameBoard" as GB
+participant "player0\n:HumanPlayer" as HP
+participant "player1\n:VirtualEasyPlayer" as VP
+
+activate UICTRL
+activate CD
+activate GCTRL
+
+P -> UICTRL : selects "Normal mode"
+UICTRL --> GCTRL : MenuChoice NORMAL
+GCTRL -> UICTRL : displayMenu(START_GAME)
+UICTRL -> CD : displayMenu(START_GAME)
+CD -> P : print(START_GAME)
+alt player selects Yes
+P -> UICTRL : selects "Want to start"
+UICTRL --> GCTRL : MenuChoice YES
+else player selects No
+P -> UICTRL : selects "Don't want to start"
+UICTRL --> GCTRL : MenuChoice NO
+end
+
+GCTRL -> G : <<create>>
+activate G
+G -> GB : <<create>>
+activate GB
+G -> HP : <<create>>
+activate HP
+G -> VP : <<create>>
+activate VP
+
+GCTRL -> UICTRL : displayBoard(GameBoard)
+UICTRL -> CD : displayBoard(GameBoard)
+CD -> P : print(GameBoard)
+
+loop while game status is IN_PROGRESS
+    GCTRL -> G : getActivePlayerEligibleHouseNumbers()
+    G -> GB : getHouseIndexes(activePlayer)
+    GB --> G : List<Integer> houseIndexes
+    G --> GCTRL : List<Integer> houseNumbers
+
+    alt eligibleHouse is not empty
+        ref over P, VP : active player plays 
+    else eligibleHouse is empty
+        ref over P, GB : end game (impossible move)
+    end
+    GCTRL -> G : getBoard()
+    G --> GCTRL : GameBoard board
+    GCTRL -> UICTRL : displayBoard(board)
+    UICTRL -> CD : displayBoard(board)
+    CD -> P : print(board)
+end
+
+@enduml

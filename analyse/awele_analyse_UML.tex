@@ -40,14 +40,13 @@
     La première version de ce jeu sera une application en console codée en Java. Le joueur jouera face à la machine en mode facile (aléatoire) ou difficile (intelligence artificielle). Cette analyse présente la première version du jeu avec la machine en mode aléatoire.
 
     \paragraph{}
-    La deuxième version du jeu consistera à ajouter une interface graphique avec JavaFX. Pour cette raison, la première version du jeu se concentrera sur la partie logique. Pour la partie graphique, qui n'est pas destinée à être conservée, je développerai de manière sommaire les vues nécessaires dans une classe générale (ConsoleUI).
+    La deuxième version du jeu consistera à ajouter une interface graphique avec JavaFX. Pour cette raison, la première version du jeu se concentrera sur la partie logique et non sur les fonctionnalités graphiques et d'interaction avec l'utilisateur.  
 
     \paragraph{}
-    V3 : enregistrement des scores
+    La troisième et dernière version ajoutera une fonctionnalité permettant d'enregistrer un score et d'afficher le tableau reprenant les meilleurs scores en liant l'application à une base de données.
     
     \paragraph{}
-    %Il reprend les schémas suivants :
-
+    Après avoir présenté les règles du jeu awéle, je présenterai le diagramme de cas d'utilisation de l'application. Je présenterai ensuite un schéma de classes simplifié qui se concentre sur la logique du jeu et un schéma détaillé reprenant l'intégralité des classes implémentées dans la première version avec leurs champs et méthodes. Enfin, je présenterai une succession de diagrammes de séquence permettant de comprendre les interactions entre les différents éléments du jeu.
 
     \newpage
     \section{Règles du jeu awélé}
@@ -92,7 +91,10 @@
     La partie peut s'arrêter dès que l'un des deux joueurs a récolté plus de 24 graines mais elle peut aussi continuer pour compter les points.
     
     \paragraph{}
-    La partie s'arrête obligatoirement dès qu'il est impossible pour un des joueurs de nourrir l'adversaire affamé : ce joueur peut alors récolter les graines qui se trouvent encore sur sa rangée.
+    La partie s'arrête obligatoirement dès qu'il est impossible pour un des joueurs de nourrir l'adversaire affamé : ce joueur peut alors récolter les graines qui se trouvent encore sur sa rangée et le joueur qui comptabilise alors le plus de graines en réserve gagne la partie.
+
+    \paragraph{}
+    Une partie s'achève toujours sur l'un des trois cas suivants : le premier joueur gagne, le second joueur gagne, ou il y a match nul.
 
 
     \newpage
@@ -109,7 +111,7 @@
 
     \begin{figure}[H]
         \centering
-        \includegraphics[width=.75\linewidth]{./schemas/cas-utilisation/usecase.png}
+        \includegraphics[width=.75\linewidth]{./schemas/usecase.png}
         \caption{Diagramme de cas d'utilisation}
     \end{figure}
 
@@ -122,84 +124,131 @@
     \paragraph{}
     Le joueur aura enfin la possibilité de consulter les scores précédemment enregistrés. Cette fonctionnalité sera développée dans la troisième version du projet avec l'implémentation d'une liaison avec une base de données locale.
 
+    \newpage
+    \section{Diagramme de classes simplifié : logique du jeu}
+    \paragraph{}
+    Ce diagramme présente une première modélisation de la logique du jeu dans la première version développée : le joueur joue face à un joueur virtuel en mode facile et l'enregistrement des scores n'est pas encore possible.
+
+    \begin{figure}[H]
+        \centering
+        \includegraphics[width=0.7\linewidth]{./schemas/classes1.png}
+    \end{figure}
+
+    \paragraph{}
+    La classe centrale est la classe \textbf{Game} qui centralise un \textbf{GameBoard} et deux joueurs implémentant l'interface \textbf{Player} : un joueur humain \textbf{HumanPlayer} et un joueur virtuel en mode facile \textbf{VirtualEasyPlayer}. C'est une relation de composition car il n'est pas prévu d'enregistrer un jeu ou un joueur. Le jeu stocke également un entier correspondant au joueur actif \textbf{activePlayer} et un statut de type \textbf{GameStatus} qui sert à déterminer si le jeu est en cours ou fini et de quelle manière (le joueur humain a gagné, perdu, ou fait match nul).
+
+    \paragraph{}
+    Pour compléter le jeu, d'autres classes doivent être ajoutées pour gérer l'affichage du plateau de jeu et des messages destinés au joueur et pour gérer la navigation dans les menus et la dynamique du jeu. C'est ce que présente le diagramme de classes suivant.
+
+    \newpage
+    \section{Diagramme de classes détaillé}
+    \begin{figure}[H]
+        \centering
+        \includegraphics[width=0.94\linewidth]{./schemas/classes2.png}
+    \end{figure}
+
+    \paragraph{}
+    Ce diagramme présente l'ensemble des classes avec champs et méthodes à implémenter pour réaliser la première version du jeu. Les classes de la logique du jeu présentées dans la section précédente sont regroupées dans la package \textbf{gamelogic} qui rassemble les classes de contrôle du jeu et des joueurs qui pourront être réutilisées pour toutes les versions futures du jeu.
+
+    \paragraph{}
+    La classe représentant le plateau de jeu a été séparée dans la package \textbf{model}. Cette classe reprend les données du jeu et les méthodes pour y accéder et les modifier. Lorsque l'enregistrement des scores sera implémenté dans la troisième version du jeu, c'est également dans ce package que sera placée la classe \textbf{Score}.
+
+    \paragraph{}
+    Le package \textbf{view} sépare les classes qui sont propres à l'affichage : les messages et messages d'erreur et les appels au système pour l'affichage en console. Les messages affichés seront conservés mais la manière dont ils seront affichés sera implémentée différemment dans la version suivante du jeu. Les menus sont écrits de manière déclarative pour faciliter les changements futurs.
+
+    \paragraph{}
+    Enfin le package \textbf{controller} reprend les classes de contrôle du jeu. Le \textbf{GameController} gère la navigation dans les menus et le démarrage d'un nouveau jeu. A sa création, une classe implémentant l'interface \textbf{UIController} lui est donnée : elle permet de gérer l'arrivée des inputs du joueur (choix des menus ou sélection d'un nombre durant le jeu) et d'appeler la vue pour l'affichage des messages et du plateau de jeu. Dans la première version du jeu, c'est la classe \textbf{UIConsoleController} qui implémente cette interface. Dans la seconde, ce sera une classe JavaFX.
+
 
     \newpage
     \section{Diagramme de séquence système}
-    
+    \begin{figure}[H]
+        \centering
+        \includegraphics[width=.8\linewidth]{./schemas/sequence1-overview.png}
+    \end{figure}
+
     \paragraph{}
-    Diagramme de séquence global qui reprend les références aux diagrammes de séquences développés plus loin : utilisateur joue et machine joue.
+    Ce diagramme présente le fonctionnement global de l'application avec les références aux diagrammes de séquences dont certains sont développés dans les sections suivantes.
 
+    \paragraph{}
+    Lorsque le joueur lance l'application, une instance du \textbf{GameController} et une instance du \textbf{UIController} sont créées, ainsi qu'une instance du \textbf{ConsoleDisplay} qui dépend du \textbf{UIConsoleController}. Ces instances sont les seules crées par le programme, ce sont donc des Singleton. Leur durée de vie s'étend sur toute la durée de vie de l'application.
 
-    \begin{itemize}
-        \item Consulter les scores
-        \item Démarrer une partie : nom du joueur ? Difficulté ?
-        \item Boucle principale : joueur 1 joue puis joueur 2 joue
-        \item Jusqu'à alt -> joueur 1 gagne / joueur 2 gagne / impossible de continuer
-        \item opt enregistrer le score
-        \item -> le joueur arrête la partie en cours (entre "quitter" au lieu d'entrer le numéro du trou à jouer)
-    \end{itemize}
-    Note : c'est toujours le joueur 1 (personne) qui commence à jouer
+    \paragraph{}
+    Le menu principal du jeu permet de consulter les scores (à implémenter dans la version 3), de jouer ou de quitter l'application. Le diagramme suivant développe la séquence où le joueur sélectionne l'option "jouer".
 
 
     \newpage
-    \section{Diagramme de classes d'analyse}
+    \section{Diagramme de séquence : le joueur choisit le menu "jouer"}
+
+    \begin{figure}[H]
+        \centering
+        \includegraphics[width=.8\linewidth]{./schemas/sequence2-player-selects-play.png}
+    \end{figure}
 
     \paragraph{}
-    Uniquement les classes nécessaires à la logique du jeu -> diagramme plus détaillé (MVC, etc) = classes de conception
-
-    \begin{itemize}
-        \item Partie (contrôleur) : 1 plateau, 40 graines, 2 joueurs, bool terminé/en cours
-        \item Plateau : 8 trous
-        \item Trou : appartient à un joueur, nb graines, prendre les graines, ajouter une graine // -> pas de classes mais deux tableaux d'entiers
-        \item Joueur virtuel : Joueur aléatoire ou joueur intelligent (héritage)
-        \item 
-    \end{itemize}
+    Lorsque le joueur sélection le menu "jouer", il doit choisir entre le mode normal (le joueur virtuel joue en mode aléatoire) ou le mode difficile. Il peut aussi choisir de revenir au menu principal. Le diagramme suivant présente la séquence où le joueur choisit de jouer en mode normal.
 
 
     \newpage
-    \section{Diagramme d'états}
+    \section{Diagramme de séquence : le joueur choisit le mode normal}
+
+    \begin{figure}[H]
+        \centering
+        \includegraphics[width=\linewidth]{./schemas/sequence3-player-selects-normal.png}
+    \end{figure}
 
     \paragraph{}
-    nécessaire ? pour quoi ?
+    Lorsque le joueur a choisi la difficulté du jeu, il doit choisir s'il souhaite commencer la partie ou si c'est le joueur virtuel qui commence. Ce choix déterminera la variable \textbf{activePlayer} de la classe \textbf{Game}.
+
+    \paragraph{}
+    Le contrôleur du jeu peut alors créer un nouveau jeu dont les paramètres dépendent des choix de l'utilisateur. Ce nouveau jeu crée un plateau qui lui est associé et deux joueurs : le joueur humain (\textbf{player0}) et le joueur virtuel (\textbf{player1}). Ces entités seront détruites au moment où le jeu prendra fin.
+
+    \paragraph{}
+    Tant que le jeu est en cours, i.e. tant que son statut n'a pas définit de gagnant, les tours de jeu s'enchaînent de la manière suivante : le contrôleur récupère la liste des trous qui peuvent être joués par le joueur actif. Si cette liste est vide, le jeu se termine car plus aucun mouvement n'est possible. Sinon, le joueur actif joue. Ces deux séquences sont présentées dans les deux derniers diagrammes de ce travail.
+
+    \newpage
+    \section{Diagramme de séquence : le joueur actif joue}
+
+    \begin{figure}[H]
+        \centering
+        \includegraphics[width=\linewidth]{./schemas/sequence4-active-player-plays.png}
+    \end{figure}
+
+    \paragraph{}
+    Si c'est le joueur humain qui est actif, le contrôleur du jeu doit faire appel au contrôleur de l'interface utilisateur pour lui demander de choisir un trou à jouer parmi la liste des numéros valides. Si c'est un joueur virtuel, la même méthode est appelée chez lui pour choisir un trou dans la liste des nombres valides.
+
+    \paragraph{}
+    Les graines sont ensuite semées dans les trous suivant et si le dernier trou appartient à l'adversaire et contient deux ou trois graines, elles sont capturées. Si la capture n'affame pas l'adversaire, elle est validée et la réserve du joueur est mise à jour.
+
+    \paragraph{}
+    Lorsqu'une réserve est mise à jour, le jeu vérifie si l'une des deux réserves comporte plus de 24 graines. Le jeu peut alors se terminer en définissant le gagnant ou sur un match nul dans le cas où les deux joueurs ont récolté chacun 24 graines.
+
+    \paragraph{}
+    Enfin, le joueur actif est changé.
 
 
     \newpage
-    \section{Séquence : joueur joue}
+    \section{Diagramme de séquence : le jeu se termine car aucun mouvement n'est possible}
+
+    \begin{figure}[H]
+        \centering
+        \includegraphics[width=\linewidth]{./schemas/sequence5-end-impossible-move.png}
+    \end{figure}
 
     \paragraph{}
-    Entre un nombre (vérif si pas vide, puis vérif si obligation de nourrir) -> partie -> plateau -> case -> répartition sur les autres cases
-    Dernière case : case adverse ? nombre de graines ? -> récolter ou non -> case précédente, etc jusqu'à case 1 adversaire
-    Si récolte : mise à jour du score (réserve)
-
-    \newpage
-    \section{Séquence : machine joue}
-
-    \paragraph{}
-    Idem sauf pour le choix du nombre
+    Lorsque plus aucun mouvement n'est possible, le joueur actif peut récolter les graines qui restent dans ses trous, le stock est mis à jour et le gagnant est défini en fonction du joueur qui a le plus de graines en réserve (ou match nul si les deux joueurs ont récolté le même nombre de graines).
 
 
     \newpage
-    \paragraph{Diagramme de classes de conception}
-
-    \paragraph{}
-    Classes détaillées avec champs et méthode (et design patterns).
-
-    \paragraph{}
-    Packages MVC
-    Vue : classe qui affiche en console / récupère les données utilisateur -> passe à la partie (contrôleur)
-
-
-
-    
-    
-    
-
-
-
-
     \section*{Conclusion}
     \label{sec:concl}
     \addcontentsline{toc}{section}{\nameref{sec:concl}}
+
+    \paragraph{}
+    Afin de rendre les changements futurs plus faciles, j'ai implémenté un design pattern MVC avec la séparation des modèles, vues et contrôleurs. La logique du jeu est bien séparée de la logique d'interaction avec l'utilisateur. Les menus sont également définis de manière déclarative afin de pouvoir les affiner sans modifier la logique d'affichage.
+    
+    \paragraph{}
+    Par contre, n'ayant pas d'expérience avec JavaFX, il m'a été difficile de prévoir avec le jeu en console ce qui pourrait être réutilisé dans le version suivante du jeu. Pour cette raison, l'interface \textbf{ConsoleUI} sera très probablement amenée à être modifiée.
 
 
 \end{document}

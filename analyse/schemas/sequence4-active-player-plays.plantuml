@@ -1,0 +1,56 @@
+@startuml sequence4-active-player-plays
+!include ./theme.plantuml
+
+actor Player as P
+participant "display\n:ConsoleDisplay" as CD
+participant "ui\n:UIConsoleController\n:UIController" as UICTRL
+participant "gameController\n:GameContoller" as GCTRL
+participant "game\n:Game" as G
+participant "board\n:GameBoard" as GB
+participant "player0\n:HumanPlayer" as HP
+participant "player1\n:VirtualEasyPlayer" as VP
+
+activate UICTRL
+activate CD
+activate GCTRL
+activate G
+activate GB
+activate HP
+activate VP
+
+alt human player is active
+    GCTRL -> HP : pickHouseForSowing(eligibleHouses)
+    HP -> UICTRL : displayMessage(PICK_HOUSE)
+    UICTRL -> CD : displayMessage(PICK_HOUSE)
+    CD -> P : print(PICK_HOUSE)
+    P -> UICTRL : picks a house
+    UICTRL --> HP : int pickedHouse
+    HP --> GCTRL : int pickedHouse
+else virtual player is active
+    GCTRL -> VP : pickHouseForSowing(eligibleHouses)
+    VP --> GCTRL : int pickedHouse
+end
+
+GCTRL -> G : sowSeeds(pickedHouse)
+G -> GB : updateHouses(newHouses)
+
+
+alt if last house belongs to the opponent and contains 2 or 3 seeds
+    G -> G : captureSeeds(fromHouseIndex)
+
+    alt if opponent isn't starved by capture
+        G -> GB : updateHouses(newHouses)
+        G -> GB : addToStock(seeds)
+        alt human players has collected more than 24 seeds
+            G -> G : end(END_WIN)
+        else virtual players has collected more than 24 seeds
+            G -> G : end(END_LOSE)
+        else human and virtual players have both collected 24 seeds
+            G -> G : end(END_DRAW)
+        end
+    end
+end
+
+G -> G : switchActivePlayer()
+
+@enduml
