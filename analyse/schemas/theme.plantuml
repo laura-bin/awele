@@ -1,0 +1,33 @@
+@startuml
+
+scale 2
+skinparam shadowing false
+skinparam backgroundColor transparent
+
+skinparam ArrowColor black
+skinparam SequenceLifeLine {
+    BorderColor darkblue
+    BackgroundColor lightblue
+}
+
+skinparam actor {
+    BorderColor black
+    BackgroundColor transparent
+}
+
+skinparam participant {
+    BorderColor black
+    BackgroundColor transparent
+}
+
+skinparam usecase {
+    BorderColor black
+    BackgroundColor transparent
+}
+
+skinparam class {
+    BorderColor black
+    BackgroundColor transparent
+}
+
+@enduml

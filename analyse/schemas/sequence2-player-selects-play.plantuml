@@ -1,0 +1,26 @@
+@startuml sequence2-player-selects-play
+!include ./theme.plantuml
+
+actor Player as P
+participant "display\n:ConsoleDisplay" as CD
+participant "ui\n:UIConsoleController\n:UIController" as UICTRL
+participant "gameController\n:GameContoller" as GCTRL
+
+activate UICTRL
+activate CD
+activate GCTRL
+P -> UICTRL : selects "Play new game"
+UICTRL --> GCTRL : MenuChoice PLAY
+GCTRL -> UICTRL : displayMenu(DIFFICULTY)
+UICTRL -> CD : displayMenu(DIFFICULTY)
+CD -> P : print(DIFFICULTY)
+
+alt
+    ref over P, GCTRL : player selects normal mode
+else
+    ref over P, GCTRL : player selects hard mode
+else
+    ref over P, GCTRL : player selects go back to main menu
+end
+
+@enduml

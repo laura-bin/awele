@@ -1,0 +1,35 @@
+@startuml sequence5-end-impossible-move
+!include ./theme.plantuml
+
+actor Player as P
+participant "display\n:ConsoleDisplay" as CD
+participant "ui\n:UIConsoleController\n:UIController" as UICTRL
+participant "gameController\n:GameContoller" as GCTRL
+participant "game\n:Game" as G
+participant "board\n:GameBoard" as GB
+
+activate UICTRL
+activate CD
+activate GCTRL
+activate G
+activate GB
+
+GCTRL -> UICTRL : displayMessage(IMPOSSIBLE_MOVE)
+UICTRL -> CD : displayMessage(IMPOSSIBLE_MOVE)
+CD -> P : print(IMPOSSIBLE_MOVE)
+GCTRL -> G : collectRemainingSeeds()
+G -> GB : getHousesValues(activePlayer)
+GB --> G : List<Integer> houses
+loop for each house in houses
+    G -> GB : addToStock(house)
+end
+G -> GB : emptyHouses(activePlayer)
+alt if human player collects more seeds than virtual player
+    G -> G : end(END_WIN)
+else if virtual player collects more seeds than human player
+    G -> G : end(END_LOSE)
+else
+    G -> G : end(END_DRAW)
+end
+
+@enduml
