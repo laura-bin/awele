@@ -6,7 +6,10 @@ import view.GameMessage;
 import view.console.ConsoleDisplay;
 
 import java.util.InputMismatchException;
+import java.util.List;
 import java.util.Scanner;
+import java.util.function.Consumer;
+import java.util.function.IntConsumer;
 
 public class UIConsoleController implements UIController {
 
@@ -19,7 +22,7 @@ public class UIConsoleController implements UIController {
      * @return a MenuChoice corresponding to the player's input
      */
     @Override
-    public MenuChoice menu(Menu menu) {
+    public void menu(Menu menu, Consumer<MenuChoice> callback) {
         Scanner sc = new Scanner(System.in);
         String playerInput;
 
@@ -30,12 +33,14 @@ public class UIConsoleController implements UIController {
 
             for (MenuChoice choice : menu.getChoices()) {
                 if (choice.isInputValid(playerInput)) {
-                    return choice;
+                    callback.accept(choice);
+                    return;
                 }
             }
             console.displayMessage(GameErrorMessage.INVALID_INPUT, playerInput);
         }
-        return MenuChoice.QUIT;
+
+        callback.accept(MenuChoice.QUIT);
     }
 
     /**
@@ -43,17 +48,17 @@ public class UIConsoleController implements UIController {
      * @return the house number picked by the human player
      */
     @Override
-    public int waitNumber() {
+    public void waitNumber(List<Integer> eligibleHouseNumbers, IntConsumer callback) {
         Scanner sc = new Scanner(System.in);
-        if (sc.hasNext()) {
-            try {
-                return sc.nextInt();
-            } catch (InputMismatchException e) {
-                return -1;
-            }
-        } else {
+        if (!sc.hasNext()) {
             System.exit(0);
-            return -1;
+            return;
+        }
+
+        try {
+            callback.accept(sc.nextInt());
+        } catch (InputMismatchException e) {
+            callback.accept(-1);
         }
     }
 
@@ -73,7 +78,8 @@ public class UIConsoleController implements UIController {
     }
 
     @Override
-    public void displayVirtualPlayerPlayingAnimation() {
+    public void displayVirtualPlayerPlayingAnimation(Runnable callback) {
         console.displayVirtualPlayerPlaying();
+        callback.run();
     }
 }

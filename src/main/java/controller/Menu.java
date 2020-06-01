@@ -7,20 +7,27 @@ import java.util.List;
  */
 public enum Menu {
     MAIN("= = = = = = = = = =  MAIN MENU  = = = = = = = = = =",
+            null,
             MenuChoice.SCORES, MenuChoice.PLAY, MenuChoice.QUIT),
     DIFFICULTY("= = = = = = = = = =  NEW  GAME  = = = = = = = = = =",
+            MAIN,
             MenuChoice.NORMAL_MODE, MenuChoice.HARD_MODE, MenuChoice.BACK),
     START_GAME("Do you want to start the game ?",
+            null,
             MenuChoice.YES, MenuChoice.NO),
     NOT_YET_IMPLEMENTED("This functionality is not yet implemented.",
-            MenuChoice.BACK, MenuChoice.QUIT),
-    GO_BACK("= = = = = = = = = = = = = = = = = = = = = = = = = =",
+            MAIN,
             MenuChoice.BACK, MenuChoice.QUIT);
 
     /**
      * Title to display above the menu choices
      */
     private final String title;
+
+    /**
+     * The menu to go back to when selecting back
+     */
+    private final Menu parent;
 
     /**
      * List of choices that can be selected in the current menu
@@ -32,8 +39,9 @@ public enum Menu {
      *
      * @param choices
      */
-    Menu(String title, MenuChoice... choices) {
+    Menu(String title, Menu parent, MenuChoice... choices) {
         this.title = title;
+        this.parent = parent;
         this.choices = List.of(choices);
     }
 

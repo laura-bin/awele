@@ -3,6 +3,7 @@ package controller.logic;
 import controller.UIController;
 
 import java.util.List;
+import java.util.function.IntConsumer;
 
 public interface Player {
 
@@ -13,6 +14,6 @@ public interface Player {
      * @param ui controller to ask to the player to choose a house
      * @return the house number picked by the player
      */
-    int pickHouseForSowing(List<Integer> eligibleHouseNumbers, UIController ui);
+    void pickHouseForSowing(List<Integer> eligibleHouseNumbers, UIController ui, IntConsumer callback);
 
 }

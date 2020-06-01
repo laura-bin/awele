@@ -4,6 +4,10 @@ import model.GameBoard;
 import view.GameErrorMessage;
 import view.GameMessage;
 
+import java.util.List;
+import java.util.function.Consumer;
+import java.util.function.IntConsumer;
+
 public interface UIController {
 
     /**
@@ -11,13 +15,13 @@ public interface UIController {
      * @param menu Menu to display
      * @return MenuChoice corresponding to the player's choice
      */
-    MenuChoice menu(Menu menu);
+    void menu(Menu menu, Consumer<MenuChoice> callback);
 
     /**
      * Waits a number picked by the player
      * @return the integer chosen by the player
      */
-    int waitNumber();
+    void waitNumber(List<Integer> eligibleHouseNumbers, IntConsumer callback);
 
     /**
      * Displays a game board
@@ -42,6 +46,6 @@ public interface UIController {
     /**
      * Displays an animation "while" the virtual player picks a number
      */
-    void displayVirtualPlayerPlayingAnimation();
+    void displayVirtualPlayerPlayingAnimation(Runnable callback);
 
 }

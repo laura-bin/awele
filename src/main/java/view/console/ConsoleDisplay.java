@@ -98,7 +98,7 @@ public class ConsoleDisplay {
         for (int i = 0; i < 3; i++) {
             try {
                 System.out.print(".");
-                TimeUnit.SECONDS.sleep(1);
+                TimeUnit.MILLISECONDS.sleep(200);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
