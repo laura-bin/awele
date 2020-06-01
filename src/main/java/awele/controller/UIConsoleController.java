@@ -1,9 +1,9 @@
-package controller;
+package awele.controller;
 
-import model.GameBoard;
-import view.GameErrorMessage;
-import view.GameMessage;
-import view.console.ConsoleDisplay;
+import awele.model.GameBoard;
+import awele.view.GameErrorMessage;
+import awele.view.GameMessage;
+import awele.view.console.ConsoleDisplay;
 
 import java.util.InputMismatchException;
 import java.util.Scanner;

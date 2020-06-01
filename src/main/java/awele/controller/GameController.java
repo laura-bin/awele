@@ -1,8 +1,8 @@
-package controller;
+package awele.controller;
 
-import controller.logic.Game;
-import controller.logic.GameStatus;
-import view.GameMessage;
+import awele.controller.logic.Game;
+import awele.controller.logic.GameStatus;
+import awele.view.GameMessage;
 
 import java.util.List;
 

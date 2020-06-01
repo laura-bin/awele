@@ -1,6 +1,6 @@
-package controller.logic;
+package awele.controller.logic;
 
-import view.GameMessage;
+import awele.view.GameMessage;
 
 public enum GameStatus {
     IN_PROGRESS(GameMessage.EMPTY),

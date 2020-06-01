@@ -1,10 +1,10 @@
-package view.console;
+package awele.view.console;
 
-import controller.Menu;
-import controller.MenuChoice;
-import model.GameBoard;
-import view.GameErrorMessage;
-import view.GameMessage;
+import awele.controller.Menu;
+import awele.controller.MenuChoice;
+import awele.model.GameBoard;
+import awele.view.GameErrorMessage;
+import awele.view.GameMessage;
 
 import java.util.List;
 import java.util.concurrent.TimeUnit;

@@ -1,4 +1,4 @@
-package view;
+package awele.view;
 
 public enum GameMessage {
     WELCOME("= = = = = = = = = = = = = = = = = = = = = = = = = =\n" +

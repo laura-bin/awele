@@ -1,7 +1,7 @@
-package controller.logic;
+package awele.controller.logic;
 
-import controller.MenuChoice;
-import model.GameBoard;
+import awele.controller.MenuChoice;
+import awele.model.GameBoard;
 
 import java.util.ArrayList;
 import java.util.List;

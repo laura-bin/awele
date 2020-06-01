@@ -1,7 +1,7 @@
-package controller.logic;
+package awele.controller.logic;
 
-import controller.UIController;
-import view.GameMessage;
+import awele.controller.UIController;
+import awele.view.GameMessage;
 
 import java.util.List;
 import java.util.Random;

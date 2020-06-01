@@ -1,4 +1,4 @@
-package view;
+package awele.view;
 
 public enum GameErrorMessage {
     INVALID_HOUSE("Invalid house, pick another one."),

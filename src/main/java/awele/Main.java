@@ -1,5 +1,7 @@
-import controller.UIConsoleController;
-import controller.GameController;
+package awele;
+
+import awele.controller.UIConsoleController;
+import awele.controller.GameController;
 
 public class Main {
     public static void main(String[] args) {

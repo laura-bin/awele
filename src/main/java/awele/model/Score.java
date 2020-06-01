@@ -1,4 +1,4 @@
-package model;
+package awele.model;
 
 import java.util.Date;
 

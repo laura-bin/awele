@@ -1,8 +1,8 @@
-package controller.logic;
+package awele.controller.logic;
 
-import controller.UIController;
-import view.GameErrorMessage;
-import view.GameMessage;
+import awele.controller.UIController;
+import awele.view.GameErrorMessage;
+import awele.view.GameMessage;
 
 import java.util.List;
 

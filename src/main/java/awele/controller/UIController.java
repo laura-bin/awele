@@ -1,8 +1,8 @@
-package controller;
+package awele.controller;
 
-import model.GameBoard;
-import view.GameErrorMessage;
-import view.GameMessage;
+import awele.model.GameBoard;
+import awele.view.GameErrorMessage;
+import awele.view.GameMessage;
 
 public interface UIController {
 
