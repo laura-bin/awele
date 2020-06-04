@@ -11,7 +11,7 @@ public class AweleApplication extends Application {
 
     @Override
     public void start(Stage stage) throws Exception {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/awele/view/MainContainer.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/awele/view/RootStack.fxml"));
         Parent root = loader.load();
 
         stage.setTitle("AWELE");
