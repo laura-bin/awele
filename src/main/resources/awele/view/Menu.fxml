@@ -7,9 +7,9 @@
 <?import javafx.scene.text.Text?>
 
 <VBox minHeight="226.0" minWidth="400.0" prefHeight="310.0" prefWidth="631.0" spacing="20.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="awele.view.javafx.Menu">
-<!--   <userData>
+   <userData>
       <fx:reference source="controller"/>
-   </userData>-->
+   </userData>
    <children>
       <BorderPane prefHeight="35.0" prefWidth="360.0">
          <center>
