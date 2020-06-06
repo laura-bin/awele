@@ -1,15 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
-<?import java.util.*?>
-<?import javafx.scene.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
-
+<?import javafx.scene.layout.StackPane?>
 <StackPane xmlns="http://javafx.com/javafx"
-            xmlns:fx="http://javafx.com/fxml"
-            fx:controller="awele.view.javafx.RootStack"
-            fx:id="root">
+           xmlns:fx="http://javafx.com/fxml"
+           fx:controller="awele.ui.javafx.RootStack"
+           fx:id="root">
+    <fx:include source="Board.fxml" fx:id="board" />
     <fx:include source="NewGame.fxml" fx:id="newGame" />
+    <fx:include source="Scores.fxml" fx:id="scores" />
     <fx:include source="Menu.fxml" fx:id="menu" />
 </StackPane>

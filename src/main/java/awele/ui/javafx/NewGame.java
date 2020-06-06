@@ -1,43 +1,51 @@
-package awele.view.javafx;
+package awele.ui.javafx;
 
-import awele.controller.GameController;
 import awele.controller.MenuChoice;
+import awele.view.javafx.Utils;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
+import javafx.scene.control.Label;
 import javafx.scene.control.RadioButton;
-import javafx.scene.layout.VBox;
-import javafx.stage.Stage;
 
 import java.net.URL;
 import java.util.ResourceBundle;
 
-public class MainContainerController implements Initializable {
+public class NewGame implements Initializable {
 
     @FXML
-    private VBox board;
-
-    @FXML
-    private CheckBox wantsToStart;
+    private RadioButton difficultyNormal;
 
     @FXML
     private RadioButton difficultyHard;
 
     @FXML
-    private RadioButton difficultyNormal;
+    private CheckBox wantsToStart;
 
-    private BoardController boardController;
+    @FXML
+    private Button playButton;
+
+    @FXML
+    private Button backButton;
+
+    @FXML
+    private Label settingsTitle;
+
+    private RootStack root;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        boardController = (BoardController) board.getUserData();
+        Utils.setText(settingsTitle);
     }
 
-    @FXML
-    public void newGame() {
+    public void setRoot(RootStack rootStack) {
+        root = rootStack;
+    }
+
+    public void play(ActionEvent actionEvent) {
+
         MenuChoice choice;
         if (difficultyNormal.isSelected()) {
             choice = MenuChoice.NORMAL_MODE;
@@ -49,6 +57,10 @@ public class MainContainerController implements Initializable {
 
         boolean wantsToStart = this.wantsToStart.isSelected();
 
-        boardController.newGame(choice, wantsToStart);
+        root.setBoardVisible(choice, wantsToStart);
+    }
+
+    public void back(ActionEvent actionEvent) {
+        root.setMenuVisible();
     }
 }

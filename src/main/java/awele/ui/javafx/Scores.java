@@ -1,8 +1,8 @@
-package awele.view.javafx;
+package awele.ui.javafx;
 
 import javafx.event.ActionEvent;
 
-public class Menu {
+public class Scores {
 
     private RootStack root;
 
@@ -10,7 +10,7 @@ public class Menu {
         this.root = root;
     }
 
-    public void newGame(ActionEvent actionEvent) {
-        this.root.setNewGameVisible();
+    public void goBack(ActionEvent actionEvent) {
+        this.root.setMenuVisible();
     }
 }

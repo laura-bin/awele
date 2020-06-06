@@ -14,10 +14,13 @@ public class AweleApplication extends Application {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/awele/view/RootStack.fxml"));
         Parent root = loader.load();
 
+        root.getStylesheets().add("/awele/view/styles.css");
+
         stage.setTitle("AWELE");
         //StackPane root = new StackPane();
         //root.getChildren().add(new Label("Hello world"));
         stage.setScene(new Scene(root));
+
         stage.show();
     }
 }

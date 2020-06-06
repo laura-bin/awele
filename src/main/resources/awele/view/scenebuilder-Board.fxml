@@ -10,9 +10,9 @@
 <?import javafx.scene.text.Font?>
 
 <VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="200.0" minWidth="100.0" spacing="5.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="awele.ui.javafx.Board">
-    <userData>
+    <!--x<userData>
         <fx:reference source="controller"/>
-    </userData>
+    </userData>x-->
     <children>
         <Label alignment="CENTER" contentDisplay="CENTER" maxWidth="1.7976931348623157E308" minHeight="25.0" text="AWELE Board" VBox.vgrow="NEVER">
          <font>
