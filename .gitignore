@@ -1,6 +1,6 @@
 # Default ignored files
 /shelf/
-/workspace.xml
+/.idea/workspace.xml
 # Datasource local storage ignored files
 /dataSources/
 /dataSources.local.xml
@@ -14,3 +14,5 @@
 /analyse/awele_analyse_UML.out
 /analyse/awele_analyse_UML.synctex.gz
 /analyse/awele_analyse_UML.toc
+
+/target/
