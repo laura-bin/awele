@@ -142,7 +142,7 @@
                </padding></Label>
             </children>
         </GridPane>
-        <Label alignment="BOTTOM_LEFT" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" text="It's your turn to play" VBox.vgrow="ALWAYS" />
+        <Label fx:id="playerMessage" alignment="BOTTOM_LEFT" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" text="" VBox.vgrow="ALWAYS" />
       <Button maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#goBack" text="GO_BACK" />
       <Button maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#quit" text="QUIT" />
     </children>

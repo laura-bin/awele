@@ -4,26 +4,34 @@ import awele.controller.Menu;
 import awele.controller.MenuChoice;
 import awele.controller.logic.Game;
 import awele.controller.logic.GameStatus;
+import awele.controller.logic.HumanPlayer;
+import awele.controller.logic.VirtualEasyPlayer;
 import awele.model.GameBoard;
 import awele.view.GameMessage;
+import awele.view.javafx.Utils;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
 import javafx.scene.Node;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.Labeled;
 import javafx.scene.layout.GridPane;
 
+import java.net.URL;
 import java.util.List;
+import java.util.ResourceBundle;
 
-public class Board {
+public class Board implements Initializable {
+
+    @FXML
+    private Label playerMessage;
 
     @FXML
     private GridPane gridBoard;
 
     // private void startGame(MenuChoice difficulty) {
-    //     boolean wantToStart = ui.menu(Menu.START_GAME) == MenuChoice.YES;
-    //
-    //     ui.displayBoard(game.getGameBoard());
-    //
+
     //     while (game.getStatus() == GameStatus.IN_PROGRESS) {
     //         List<Integer> eligibleHouses = game.getActivePlayerEligibleHouseNumbers();
     //         if (eligibleHouses.isEmpty()) {
@@ -42,6 +50,18 @@ public class Board {
     private RootStack root;
     private Game game;
 
+
+    @Override
+    public void initialize(URL location, ResourceBundle resources) {
+        for (Node node : gridBoard.getChildren()) {
+            if (GridPane.getRowIndex(node) == 1 && GridPane.getColumnIndex(node) < GameBoard.N_HOUSES_PER_PLAYER) {
+                ((Button) node).setOnAction(e -> {
+                    playerPickedHouse(GridPane.getColumnIndex(node) + 1);
+                });
+            }
+        }
+    }
+
     public void setRoot(RootStack rootStack) {
         root = rootStack;
     }
@@ -50,6 +70,37 @@ public class Board {
         this.game = game;
         displayBoard(game.getGameBoard());
 
+        turn();
+    }
+
+    public void turn() {
+        List<Integer> eligibleHouses = game.getActivePlayerEligibleHouseNumbers();
+        if (eligibleHouses.isEmpty()) {
+            Utils.setText(playerMessage, GameMessage.IMPOSSIBLE_MOVE);
+            game.collectRemainingSeeds();
+        } else {
+            if (game.getActivePlayer() instanceof HumanPlayer) {
+                for (Node node : gridBoard.getChildren()) {
+                    Integer columnIndex = GridPane.getColumnIndex(node);
+                    if (GridPane.getRowIndex(node) == 1 && columnIndex < GameBoard.N_HOUSES_PER_PLAYER) {
+                        node.setDisable(!eligibleHouses.contains(columnIndex + 1));
+                    }
+                }
+            } else {
+                int pickedHouse = ((VirtualEasyPlayer)game.getActivePlayer()).pickHouseForSowing(eligibleHouses);
+                playerPickedHouse(pickedHouse);
+            }
+        }
+    }
+
+    public void playerPickedHouse(int pickedHouseNumber) {
+        game.sowSeeds(pickedHouseNumber);
+        displayBoard(game.getGameBoard());
+        if (game.getStatus() != GameStatus.IN_PROGRESS) {
+            Utils.setText(playerMessage, game.getStatus().getMessage());
+            return;
+        }
+        turn();
     }
 
     public void goBack(ActionEvent actionEvent) {
@@ -81,5 +132,4 @@ public class Board {
             return String.valueOf(board.getStock(player));
         }
     }
-
 }

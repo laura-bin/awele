@@ -1,6 +1,7 @@
 package awele.view.javafx;
 
 import awele.view.GameMessage;
+import javafx.scene.control.Label;
 import javafx.scene.control.Labeled;
 
 public class Utils {
@@ -18,5 +19,9 @@ public class Utils {
         }
 
         labeled.setText(gameMessage.getText());
+    }
+
+    public static void setText(Label labeled, GameMessage message) {
+        labeled.setText(message.getText());
     }
 }

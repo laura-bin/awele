@@ -17,4 +17,10 @@ public class VirtualEasyPlayer implements Player {
         return pickedHouse;
     }
 
+    public int pickHouseForSowing(List<Integer> eligibleHouses) {
+        Random r = new Random();
+        int pickedHouse = eligibleHouses.get(r.nextInt(eligibleHouses.size()));
+        return pickedHouse;
+    }
+
 }
