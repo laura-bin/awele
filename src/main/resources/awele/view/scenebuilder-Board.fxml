@@ -21,7 +21,7 @@
          <VBox.margin>
             <Insets />
          </VBox.margin></Label>
-      <Label fx:id="duration" alignment="TOP_RIGHT" contentDisplay="RIGHT" maxWidth="1.7976931348623157E308" text="Label" textAlignment="RIGHT" />
+      <Label fx:id="duration" alignment="TOP_RIGHT" contentDisplay="RIGHT" maxWidth="1.7976931348623157E308" textAlignment="RIGHT" />
         <GridPane fx:id="gridBoard" alignment="CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="200.0" minWidth="200.0" VBox.vgrow="ALWAYS">
             <columnConstraints>
                 <ColumnConstraints fillWidth="false" hgrow="NEVER" maxWidth="1.7976931348623157E308" minWidth="10.0" />
