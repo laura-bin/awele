@@ -1,7 +1,5 @@
 package awele.ui.javafx;
 
-import awele.controller.Menu;
-import awele.controller.MenuChoice;
 import awele.controller.logic.Game;
 import awele.controller.logic.GameStatus;
 import awele.controller.logic.HumanPlayer;
@@ -32,7 +30,7 @@ public class Board implements Initializable {
     private static final ScheduledExecutorService executor = Executors.newSingleThreadScheduledExecutor();
 
     @FXML
-    private Label chronometer;
+    private Label duration;
 
     @FXML
     private Label playerMessage;
@@ -77,8 +75,8 @@ public class Board implements Initializable {
                 if (game == null) {
                     return;
                 }
-                Duration currentTimeDuration = game.getCurrentTimeDuration();
-                chronometer.setText(String.format("%s:%s:%s", currentTimeDuration.toHours(),
+                Duration currentTimeDuration = game.getDuration();
+                duration.setText(String.format("%02d:%02d:%02d", currentTimeDuration.toHours(),
                     currentTimeDuration.toMinutesPart(), currentTimeDuration.toSecondsPart()));
             });
         }, 0, 1, TimeUnit.SECONDS);
