@@ -3,6 +3,7 @@ package awele.controller.logic;
 import awele.controller.MenuChoice;
 import awele.model.GameBoard;
 
+import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -10,8 +11,9 @@ public class Game {
 
     private final GameBoard board;        // board of 2 rows of 6 houses + 2 stock houses
     private final List<Player> players;   // players controllers (number pickers)
-    private int activePlayer;       // active player number : 0 for human player and 1 for virtual player
-    private GameStatus status;      // game status in progress / end
+    private int activePlayer;             // active player number : 0 for human player and 1 for virtual player
+    private GameStatus status;            // game status in progress / end
+    private final long chronometer;       // time at which the game started
 
     /**
      * Constructor
@@ -19,6 +21,7 @@ public class Game {
      * @param humanStarts does the human player wants to start (boolean)
      */
     public Game(MenuChoice gameDifficulty, boolean humanStarts) {
+        this.chronometer = System.nanoTime();
         this.board = new GameBoard();
 
         this.players = new ArrayList<>();
@@ -249,5 +252,9 @@ public class Game {
      */
     private int convertPickedHouseToHouseIndex(int pickedHouseNumber) {
         return pickedHouseNumber + GameBoard.N_HOUSES_PER_PLAYER * activePlayer - 1;
+    }
+
+    public Duration getCurrentTimeDuration() {
+        return Duration.ofNanos(System.nanoTime() - chronometer);
     }
 }

@@ -9,6 +9,7 @@ import awele.controller.logic.VirtualEasyPlayer;
 import awele.model.GameBoard;
 import awele.view.GameMessage;
 import awele.view.javafx.Utils;
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -19,10 +20,19 @@ import javafx.scene.control.Labeled;
 import javafx.scene.layout.GridPane;
 
 import java.net.URL;
+import java.time.Duration;
 import java.util.List;
 import java.util.ResourceBundle;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 public class Board implements Initializable {
+
+    private static final ScheduledExecutorService executor = Executors.newSingleThreadScheduledExecutor();
+
+    @FXML
+    private Label chronometer;
 
     @FXML
     private Label playerMessage;
@@ -60,6 +70,18 @@ public class Board implements Initializable {
                 });
             }
         }
+
+        executor.scheduleAtFixedRate(() -> {
+            // insert the task in the javafx thread's task queue
+            Platform.runLater(() -> {
+                if (game == null) {
+                    return;
+                }
+                Duration currentTimeDuration = game.getCurrentTimeDuration();
+                chronometer.setText(String.format("%s:%s:%s", currentTimeDuration.toHours(),
+                    currentTimeDuration.toMinutesPart(), currentTimeDuration.toSecondsPart()));
+            });
+        }, 0, 1, TimeUnit.SECONDS);
     }
 
     public void setRoot(RootStack rootStack) {
