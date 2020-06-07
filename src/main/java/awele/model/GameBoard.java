@@ -7,7 +7,7 @@ import java.util.List;
 public class GameBoard {
     /* GAME BOARD VIEW WITH 2 PLAYERS AND 6 HOUSES PER PLAYER
 
-            houses[]                  stock[]
+            houses[]                          stock[]
         +-----+-----+-----+-----+-----+-----+ +-----+
         | 11  | 10  |  9  |  8  |  7  |  6  | |  1  |  PLAYER 1 (virtual player)
         +-----+-----+-----+-----+-----+-----+ +-----+

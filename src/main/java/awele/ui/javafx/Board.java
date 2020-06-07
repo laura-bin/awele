@@ -100,6 +100,7 @@ public class Board implements Initializable {
             game.collectRemainingSeeds();
         } else {
             if (game.getActivePlayer() instanceof HumanPlayer) {
+                playerMessage.setText(GameMessage.HUMAN_PLAYER_TURN.getText());
                 for (Node node : gridBoard.getChildren()) {
                     Integer columnIndex = GridPane.getColumnIndex(node);
                     if (GridPane.getRowIndex(node) == 1 && columnIndex < GameBoard.N_HOUSES_PER_PLAYER) {
@@ -107,8 +108,30 @@ public class Board implements Initializable {
                     }
                 }
             } else {
-                int pickedHouse = ((VirtualEasyPlayer)game.getActivePlayer()).pickHouseForSowing(eligibleHouses);
-                playerPickedHouse(pickedHouse);
+                for (Node node : gridBoard.getChildren()) {
+                    Integer columnIndex = GridPane.getColumnIndex(node);
+                    if (GridPane.getRowIndex(node) == 1 && columnIndex < GameBoard.N_HOUSES_PER_PLAYER) {
+                        node.setDisable(true);
+                    }
+                }
+                playerMessage.setText(GameMessage.VIRTUAL_PLAYER_TURN.getText());
+                executor.schedule(() -> {
+                    Platform.runLater(() -> {
+                        int pickedHouse = ((VirtualEasyPlayer)game.getActivePlayer()).pickHouseForSowing(eligibleHouses);
+                        colorVirtualPlayerPickedHouse(pickedHouse);
+                        playerPickedHouse(pickedHouse);
+                    });
+                }, 3, TimeUnit.SECONDS);
+            }
+        }
+    }
+
+    private void colorVirtualPlayerPickedHouse(int pickedHouse) {
+        int rowIndex = GameBoard.N_HOUSES_PER_PLAYER - pickedHouse;
+        for (Node node : gridBoard.getChildren()) {
+            Integer columnIndex = GridPane.getColumnIndex(node);
+            if (GridPane.getRowIndex(node) == 0 && columnIndex == rowIndex) {
+                node.getStyleClass().add("picked");
             }
         }
     }

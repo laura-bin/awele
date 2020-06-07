@@ -10,7 +10,9 @@ public enum GameMessage {
     WIN("You win !"),
     DRAW("Draw : both players have collected the same amount of seeds."),
     LOSE("Virtual player wins !"),
-    EMPTY("");
+    EMPTY(""),
+    HUMAN_PLAYER_TURN("It's your turn to play."),
+    VIRTUAL_PLAYER_TURN("Virtual player is picking a house.");
 
     /**
      * Message to display in the user interface
