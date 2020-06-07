@@ -61,8 +61,24 @@ public class Board {
     }
 
     private void displayBoard(GameBoard board) {
+
         for (Node node : gridBoard.getChildren()) {
-            ((Labeled) node).setText(String.valueOf(board.getHouseValue(0)));
+            ((Labeled) node).setText(getHouseValue(GridPane.getRowIndex(node), GridPane.getColumnIndex(node), board));
+        }
+
+
+    }
+
+    private String getHouseValue(int row, int column, GameBoard board) {
+        int player = (row + 1) % 2;
+        if (column < GameBoard.N_HOUSES_PER_PLAYER) {
+            if (player == 0) {
+                return String.valueOf(board.getHouseValue(column));
+            } else {
+                return String.valueOf(board.getHouseValue(GameBoard.N_PLAYERS*GameBoard.N_HOUSES_PER_PLAYER - 1 - column));
+            }
+        } else {
+            return String.valueOf(board.getStock(player));
         }
     }
 

@@ -8,11 +8,11 @@ public class GameBoard {
     /* GAME BOARD VIEW WITH 2 PLAYERS AND 6 HOUSES PER PLAYER
 
             houses[]                  stock[]
-        +-----+-----+-----+-----+ +-----+
-        |  7  |  6  |  5  |  4  | |  1  |  PLAYER 1 (virtual player)
-        +-----+-----+-----+-----+ +-----+
-        |  0  |  1  |  2  |  3  | |  0  |  PLAYER 0 (human player)
-        +-----+-----+-----+-----+ +-----+
+        +-----+-----+-----+-----+-----+-----+ +-----+
+        | 11  | 10  |  9  |  8  |  7  |  6  | |  1  |  PLAYER 1 (virtual player)
+        +-----+-----+-----+-----+-----+-----+ +-----+
+        |  0  |  1  |  2  |  3  |  4  |  5  | |  0  |  PLAYER 0 (human player)
+        +-----+-----+-----+-----+-----+-----+ +-----+
      */
 
     public static final int N_PLAYERS = 2;              // number of players
