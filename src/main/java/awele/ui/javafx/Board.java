@@ -38,6 +38,12 @@ public class Board implements Initializable {
     @FXML
     private GridPane gridBoard;
 
+    @FXML
+    private Label virtualPlayerTurnMarker;
+
+    @FXML
+    private Label humanPlayerTurnMarker;
+
     // private void startGame(MenuChoice difficulty) {
 
     //     while (game.getStatus() == GameStatus.IN_PROGRESS) {
@@ -62,10 +68,9 @@ public class Board implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         for (Node node : gridBoard.getChildren()) {
-            if (GridPane.getRowIndex(node) == 1 && GridPane.getColumnIndex(node) < GameBoard.N_HOUSES_PER_PLAYER) {
-                ((Button) node).setOnAction(e -> {
-                    playerPickedHouse(GridPane.getColumnIndex(node) + 1);
-                });
+            Integer columnIndex = GridPane.getColumnIndex(node);
+            if (GridPane.getRowIndex(node) == 1 && columnIndex > 0 && columnIndex <= GameBoard.N_HOUSES_PER_PLAYER) {
+                ((Button) node).setOnAction(e -> playerPickedHouse(columnIndex));
             }
         }
 
@@ -101,36 +106,42 @@ public class Board implements Initializable {
         } else {
             if (game.getActivePlayer() instanceof HumanPlayer) {
                 playerMessage.setText(GameMessage.HUMAN_PLAYER_TURN.getText());
+
+                humanPlayerTurnMarker.setText("⟶");
+                virtualPlayerTurnMarker.setText("");
+
                 for (Node node : gridBoard.getChildren()) {
                     Integer columnIndex = GridPane.getColumnIndex(node);
-                    if (GridPane.getRowIndex(node) == 1 && columnIndex < GameBoard.N_HOUSES_PER_PLAYER) {
-                        node.setDisable(!eligibleHouses.contains(columnIndex + 1));
+                    if (GridPane.getRowIndex(node) == 1 && columnIndex > 0 && columnIndex <= GameBoard.N_HOUSES_PER_PLAYER) {
+                        node.setDisable(!eligibleHouses.contains(columnIndex));
                     }
                 }
             } else {
+
+                humanPlayerTurnMarker.setText("");
+                virtualPlayerTurnMarker.setText("⟶");
+
                 for (Node node : gridBoard.getChildren()) {
                     Integer columnIndex = GridPane.getColumnIndex(node);
-                    if (GridPane.getRowIndex(node) == 1 && columnIndex < GameBoard.N_HOUSES_PER_PLAYER) {
+                    if (GridPane.getRowIndex(node) == 1 && columnIndex > 0 && columnIndex <= GameBoard.N_HOUSES_PER_PLAYER) {
                         node.setDisable(true);
                     }
                 }
                 playerMessage.setText(GameMessage.VIRTUAL_PLAYER_TURN.getText());
-                executor.schedule(() -> {
-                    Platform.runLater(() -> {
-                        int pickedHouse = ((VirtualEasyPlayer)game.getActivePlayer()).pickHouseForSowing(eligibleHouses);
-                        colorVirtualPlayerPickedHouse(pickedHouse);
-                        playerPickedHouse(pickedHouse);
-                    });
-                }, 3, TimeUnit.SECONDS);
+                executor.schedule(() -> Platform.runLater(() -> {
+                    int pickedHouse = ((VirtualEasyPlayer)game.getActivePlayer()).pickHouseForSowing(eligibleHouses);
+                    colorVirtualPlayerPickedHouse(pickedHouse);
+                    playerPickedHouse(pickedHouse);
+                }), 2, TimeUnit.SECONDS);
             }
         }
     }
 
     private void colorVirtualPlayerPickedHouse(int pickedHouse) {
-        int rowIndex = GameBoard.N_HOUSES_PER_PLAYER - pickedHouse;
+        int pickedHouseGridColumn = GameBoard.N_HOUSES_PER_PLAYER - pickedHouse + 1;
         for (Node node : gridBoard.getChildren()) {
             Integer columnIndex = GridPane.getColumnIndex(node);
-            if (GridPane.getRowIndex(node) == 0 && columnIndex == rowIndex) {
+            if (GridPane.getRowIndex(node) == 0 && columnIndex == pickedHouseGridColumn) {
                 node.getStyleClass().add("picked");
             }
         }
@@ -155,16 +166,18 @@ public class Board implements Initializable {
     }
 
     private void displayBoard(GameBoard board) {
-
         for (Node node : gridBoard.getChildren()) {
             ((Labeled) node).setText(getHouseValue(GridPane.getRowIndex(node), GridPane.getColumnIndex(node), board));
         }
-
-
     }
 
     private String getHouseValue(int row, int column, GameBoard board) {
         int player = (row + 1) % 2;
+        if (column == 0) {
+            return null;
+        }
+
+        --column;
         if (column < GameBoard.N_HOUSES_PER_PLAYER) {
             if (player == 0) {
                 return String.valueOf(board.getHouseValue(column));

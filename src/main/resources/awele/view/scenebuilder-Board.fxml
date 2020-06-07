@@ -37,23 +37,18 @@
                 <RowConstraints fillHeight="false" maxHeight="1.7976931348623157E308" minHeight="10.0" vgrow="NEVER" />
             </rowConstraints>
             <children>
-                <Button disable="true" mnemonicParsing="false" text="5" GridPane.rowIndex="0" GridPane.columnIndex="0">
-                    <padding>
-                        <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
-                    </padding>
-                    <GridPane.margin>
-                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-                    </GridPane.margin>
-                </Button>
-                <Button mnemonicParsing="false" text="5" GridPane.rowIndex="1" GridPane.columnIndex="0">
-                    <padding>
-                        <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
-                    </padding>
-                    <GridPane.margin>
-                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-                    </GridPane.margin>
-                </Button>
+                <Label fx:id="virtualPlayerTurnMarker" GridPane.rowIndex="0" GridPane.columnIndex="0" />
+                <Label fx:id="humanPlayerTurnMarker" GridPane.rowIndex="1" GridPane.columnIndex="0" />
+
                 <Button disable="true" mnemonicParsing="false" text="5" GridPane.rowIndex="0" GridPane.columnIndex="1">
+                    <padding>
+                        <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+                    </padding>
+                    <GridPane.margin>
+                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                    </GridPane.margin>
+                </Button>
+                <Button mnemonicParsing="false" text="5" GridPane.rowIndex="1" GridPane.columnIndex="1">
                     <padding>
                         <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
                     </padding>
@@ -93,7 +88,7 @@
                         <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                     </GridPane.margin>
                 </Button>
-                <Button mnemonicParsing="false" text="5" GridPane.rowIndex="1" GridPane.columnIndex="1">
+                <Button disable="true" mnemonicParsing="false" text="5" GridPane.rowIndex="0" GridPane.columnIndex="6">
                     <padding>
                         <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
                     </padding>
@@ -133,11 +128,19 @@
                         <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                     </GridPane.margin>
                 </Button>
-            <Label alignment="CENTER" contentDisplay="CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" style="-fx-background-color: lightgray;" text="0" textAlignment="CENTER" GridPane.rowIndex="0" GridPane.columnIndex="6" GridPane.halignment="CENTER" GridPane.valignment="CENTER">
+                <Button mnemonicParsing="false" text="5" GridPane.rowIndex="1" GridPane.columnIndex="6">
+                    <padding>
+                        <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+                    </padding>
+                    <GridPane.margin>
+                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                    </GridPane.margin>
+                </Button>
+            <Label alignment="CENTER" contentDisplay="CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" style="-fx-background-color: lightgray;" text="0" textAlignment="CENTER" GridPane.rowIndex="0" GridPane.columnIndex="7" GridPane.halignment="CENTER" GridPane.valignment="CENTER">
                <padding>
                   <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
                </padding></Label>
-            <Label alignment="CENTER" contentDisplay="CENTER" layoutX="364.0" layoutY="69.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" style="-fx-background-color: lightgray;" text="0" textAlignment="CENTER" GridPane.rowIndex="1" GridPane.columnIndex="6" GridPane.halignment="CENTER" GridPane.valignment="CENTER">
+            <Label alignment="CENTER" contentDisplay="CENTER" layoutX="364.0" layoutY="69.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" style="-fx-background-color: lightgray;" text="0" textAlignment="CENTER" GridPane.rowIndex="1" GridPane.columnIndex="7" GridPane.halignment="CENTER" GridPane.valignment="CENTER">
                <padding>
                   <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
                </padding></Label>
