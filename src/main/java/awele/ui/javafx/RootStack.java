@@ -48,7 +48,7 @@ public class RootStack implements Initializable {
     }
 
     public void setBoardVisible(MenuChoice difficulty, boolean wantsToStart) {
-        boardController.setGame(new Game(difficulty, wantsToStart));
+        boardController.startGame(new Game(difficulty, wantsToStart));
         setPaneVisible(board);
     }
 
