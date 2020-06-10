@@ -65,7 +65,7 @@ public class GameSettingsMenuPane implements Initializable {
     }
 
     /**
-     * Go back to main menu
+     * Goes back to main menu
      */
     public void goBack() {
         root.setMainMenuVisible();

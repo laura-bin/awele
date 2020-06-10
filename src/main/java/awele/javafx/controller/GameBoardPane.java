@@ -34,7 +34,7 @@ import java.util.concurrent.TimeUnit;
 public class GameBoardPane implements Initializable  {
 
     private static final ScheduledExecutorService executor = Executors.newSingleThreadScheduledExecutor();
-    private static final int animationDelay = 1000; // time delay for the game animations in milliseconds
+    private static final int ANIMATION_DELAY = 1000; // time delay for the game animations in milliseconds
 
     @FXML
     private Label duration;
@@ -89,15 +89,20 @@ public class GameBoardPane implements Initializable  {
      */
     public void startGame(Game game) {
         this.game = game;
-        displayBoard(game.getGameBoard());
         turn();
     }
 
-    public void goBack(ActionEvent actionEvent) {
+    /**
+     * Goes back to main menu
+     */
+    public void goBack() {
         this.root.setMainMenuVisible();
     }
 
-    public void quit(ActionEvent actionEvent) {
+    /**
+     * Quits the application
+     */
+    public void quit() {
         this.root.quit();
     }
 
@@ -112,40 +117,101 @@ public class GameBoardPane implements Initializable  {
     private void turn() {
         List<Integer> eligibleHouses = game.getActivePlayerEligibleHouseNumbers();
 
+        removeHousesStyles();
+        displayBoard(game.getGameBoard());
+
         // if no move is possible, collect remaining seeds and end game
         if (eligibleHouses.isEmpty()) {
+            humanPlayerTurnMarker.setText("");
             virtualPlayerTurnMarker.setText("");
-            virtualPlayerTurnMarker.setText(">");
             Utils.setText(playerMessage, GameMessage.IMPOSSIBLE_MOVE);
             collectRemainingSeeds();
         } else {
             if (game.activePlayerIsHuman()) {
-                // human player's turn
                 humanPlayerTurnMarker.setText(">");
                 virtualPlayerTurnMarker.setText("");
                 playerMessage.setText(GameMessage.HUMAN_PLAYER_TURN.getText());
                 setDisableHumanPlayerHouses(eligibleHouses);
             } else {
-
                 humanPlayerTurnMarker.setText("");
-                virtualPlayerTurnMarker.setText("⟶");
-
-                for (Node node : gridBoard.getChildren()) {
-                    Integer columnIndex = GridPane.getColumnIndex(node);
-                    if (GridPane.getRowIndex(node) == 1 && columnIndex > 0 && columnIndex <= awele.model.GameBoard.N_HOUSES_PER_PLAYER) {
-                        node.setDisable(true);
-                    }
-                }
+                virtualPlayerTurnMarker.setText(">");
                 playerMessage.setText(GameMessage.VIRTUAL_PLAYER_TURN.getText());
+                setDisableHumanPlayerHouses();
+
                 executor.schedule(() -> Platform.runLater(() -> {
                     int pickedHouse = game.getVirtualPlayerPickedHouse();
                     Labeled houseNode = getHouseNode(pickedHouse, game.getActivePlayerNumber());
-                    houseNode.getStyleClass().add("picked");
                     sowSeeds(pickedHouse);
-                }), 2, TimeUnit.SECONDS);
+                }), ANIMATION_DELAY*2, TimeUnit.MILLISECONDS);
             }
         }
     }
+
+    /**
+     * Sows seeds when a player picks a house
+     *
+     * @param pickedHouseNumber house picked number
+     */
+    public void sowSeeds(int pickedHouseNumber) {
+        Labeled houseNode = getHouseNode(pickedHouseNumber, game.getActivePlayerNumber());
+        int nSowing = Integer.parseInt(getActivePlayerNodeByHouseNumber(pickedHouseNumber).getText());
+        int player = game.getActivePlayerNumber();
+
+        setDisableHumanPlayerHouses();
+        houseNode.getStyleClass().add("picked");
+        game.sowSeeds(pickedHouseNumber);
+        sowSeeds(pickedHouseNumber, player, pickedHouseNumber, player, nSowing);
+    }
+
+    /**
+     * Sows seed animation in the next house
+     * At last launches the animation to capture seeds
+     *
+     * @param firstHouse first house from which the sowing starts (kept to avoid sowing in the original house)
+     * @param firstPlayer first player from which the sowing starts (kept to avoid sowing in the original house)
+     * @param previousHouse house in which the last seed has been planted
+     * @param previousPlayer player who has planted the last seed
+     * @param nSowing number of sowing remaining
+     */
+    private void sowSeeds(int firstHouse, int firstPlayer, int previousHouse, int previousPlayer, int nSowing) {
+        executor.schedule(() -> Platform.runLater(() -> {
+            if (nSowing == 0) {
+                captureSeeds(previousHouse, previousPlayer);
+            } else {
+                Labeled houseNode;
+                int nextHouse;
+                int nextPlayer;
+                int nextNSowing = nSowing - 1;
+
+                if (previousHouse < GameBoard.N_HOUSES_PER_PLAYER) {
+                    nextHouse = previousHouse + 1;
+                    nextPlayer = previousPlayer;
+                } else {
+                    nextHouse = 1;
+                    nextPlayer = (previousPlayer + 1) % 2;
+                }
+
+                // skip the starting house
+                if (nextHouse == firstHouse && nextPlayer == firstPlayer) {
+                    if (nextHouse < GameBoard.N_HOUSES_PER_PLAYER) {
+                        nextHouse++;
+                    } else {
+                        nextHouse = 1;
+                        nextPlayer = (previousPlayer + 1) % 2;
+                    }
+                }
+
+                houseNode = getHouseNode(nextHouse, nextPlayer);
+                houseNode.getStyleClass().add("brightened");
+                houseNode.setText(String.valueOf(Integer.parseInt(houseNode.getText()) + 1));
+                sowSeeds(firstHouse, firstPlayer, nextHouse, nextPlayer, nextNSowing);
+            }
+        }), ANIMATION_DELAY, TimeUnit.MILLISECONDS);
+    }
+
+
+
+
 
     /**
      * Remaining seeds collect animation
@@ -200,32 +266,25 @@ public class GameBoardPane implements Initializable  {
         Labeled houseNode = getHouseNode(fromHouseNumber, game.getActivePlayerNumber());
         int seedsInHouse = Integer.parseInt(houseNode.getText());
 
-        while (fromHouseNumber <= GameBoard.N_HOUSES_PER_PLAYER && seedsInHouse >= minSeeds && seedsInHouse <= maxSeeds) {
-            int nextHouseNumber = fromHouseNumber - 1;
-            if (seedsInHouse == 0) {
-                fromHouseNumber--;
-                break;
-            } else {
-
-            }
-
-            houseNode.getStyleClass().add("brightened");
-            houseNode.setText("0");
-            executor.schedule(() -> {
-                Platform.runLater(() -> {
-                    stock.getStyleClass().add("brightened");
-                    stock.setText(String.valueOf(Integer.parseInt(stock.getText()) + seedsInHouse));
-                    executor.schedule(() -> {
-                        collectSeeds(nextHouseNumber, stock, minSeeds, maxSeeds);
-                    }, 200, TimeUnit.MILLISECONDS);
-                });
-            }, 200, TimeUnit.MILLISECONDS);
-
+        // the loop is used to skip animation on empty houses when the method is called by collectRemainingSeeds()
+        while (fromHouseNumber > 0 && seedsInHouse >= minSeeds && seedsInHouse <= maxSeeds) {
+            int previousHouseNumber = fromHouseNumber - 1;
 
             if (seedsInHouse > 0) {
-
+                houseNode.getStyleClass().add("brightened");
+                houseNode.setText("0");
+                executor.schedule(() -> {
+                    Platform.runLater(() -> {
+                        stock.getStyleClass().add("brightened");
+                        stock.setText(String.valueOf(Integer.parseInt(stock.getText()) + seedsInHouse));
+                        executor.schedule(() -> {
+                            collectSeeds(previousHouseNumber, stock, minSeeds, maxSeeds);
+                        }, ANIMATION_DELAY, TimeUnit.MILLISECONDS);
+                    });
+                }, ANIMATION_DELAY, TimeUnit.MILLISECONDS);
                 break;
             }
+            fromHouseNumber--;
         }
     }
 
@@ -258,56 +317,16 @@ public class GameBoardPane implements Initializable  {
         }
     }
 
-
-
-    /**
-     * Sows seeds when a player picks a house
-     *
-     * @param pickedHouseNumber house picked number
-     */
-    public void sowSeeds(int pickedHouseNumber) {
-        setDisableHumanPlayerHouses();
-        game.sowSeeds(pickedHouseNumber);
-        int nSowing = Integer.parseInt(getActivePlayerNodeByHouseNumber(pickedHouseNumber).getText());
-        int player = game.getActivePlayerNumber();
-
-        sowSeeds(pickedHouseNumber, player, nSowing);
+    private void removeHousesStyles() {
+        for (Node node : gridBoard.getChildren()) {
+            node.getStyleClass().remove("brightened");
+            node.getStyleClass().remove("picked");
+        }
     }
 
-    /**
-     * Sows seed animation in the next house
-     * At last launches the animation to capture seeds
-     *
-     * @param house previously updated house
-     * @param player player to who belongs the last house updated
-     * @param nSowing number of sowing remaining
-     */
-    private void sowSeeds(int house, int player, int nSowing) {
-        executor.schedule(() -> {
-            Platform.runLater(() -> {
-                if (nSowing == 0) {
-                    captureSeeds(house, player);
-                } else {
-                    int nextHouse;
-                    int nextPlayer;
-                    int nextNSowing = nSowing - 1;
 
-                    if (house < GameBoard.N_HOUSES_PER_PLAYER) {
-                        nextHouse = house + 1;
-                        nextPlayer = player;
-                    } else {
-                        nextHouse = 1;
-                        nextPlayer = (player + 1) % 2;
-                    }
-                    Labeled houseNode = getHouseNode(nextHouse, nextPlayer);
-                    // TODO set css class
-                    houseNode.setDisable(false);
-                    houseNode.setText(String.valueOf(Integer.parseInt(houseNode.getText()) + 1));
-                    sowSeeds(nextHouse, nextPlayer, nextNSowing);
-                }
-            });
-        }, animationDelay, TimeUnit.MILLISECONDS);
-    }
+
+
 
     /**
      * Animates the capture of seeds
@@ -322,9 +341,6 @@ public class GameBoardPane implements Initializable  {
                 Labeled houseNode = getHouseNode(lastHouseUpdated, lastPlayer);
                 Labeled stockHouse = getHouseNode(GameBoard.N_HOUSES_PER_PLAYER + 1, game.getActivePlayerNumber());
                 // TODO set style to house node and stock node
-                GameBoard b = game.getGameBoard();
-                System.out.println(b.getStockByPlayer(1));
-                displayBoard(game.getGameBoard());
             }
         }
         if (game.getStatus() == GameStatus.IN_PROGRESS) {

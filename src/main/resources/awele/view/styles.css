@@ -6,3 +6,7 @@
 .picked {
     -fx-border-color: darkmagenta;
 }
+
+.brightened {
+    -fx-border-color: green;
+}
