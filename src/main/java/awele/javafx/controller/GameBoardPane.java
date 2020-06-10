@@ -4,7 +4,6 @@ import awele.gamelogic.*;
 import awele.model.GameBoard;
 import awele.ui.GameMessage;
 import javafx.application.Platform;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
@@ -15,11 +14,10 @@ import javafx.scene.layout.GridPane;
 
 import java.net.URL;
 import java.time.Duration;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.ResourceBundle;
+import java.util.*;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
 
 /* Grid Pane indexes
@@ -34,7 +32,7 @@ import java.util.concurrent.TimeUnit;
 public class GameBoardPane implements Initializable  {
 
     private static final ScheduledExecutorService executor = Executors.newSingleThreadScheduledExecutor();
-    private static final int ANIMATION_DELAY = 1000; // time delay for the game animations in milliseconds
+    private static final long ANIMATION_DELAY = 1000; // time delay for the game animations in milliseconds
 
     @FXML
     private Label duration;
@@ -50,6 +48,8 @@ public class GameBoardPane implements Initializable  {
     private RootStack root;
 
     private Game game;
+
+    private final Deque<ScheduledFuture<?>> animations = new ArrayDeque<>(); // animations in progress
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -94,8 +94,17 @@ public class GameBoardPane implements Initializable  {
 
     /**
      * Goes back to main menu
+     * and resets the visual state of the game (animations and styles)
      */
     public void goBack() {
+        // cancel pending animations
+        for (ScheduledFuture<?> animation : animations) {
+            animation.cancel(false);
+        }
+        animations.clear();
+
+        removeHousesStyles();
+
         this.root.setMainMenuVisible();
     }
 
@@ -138,11 +147,7 @@ public class GameBoardPane implements Initializable  {
                 playerMessage.setText(GameMessage.VIRTUAL_PLAYER_TURN.getText());
                 setDisableHumanPlayerHouses();
 
-                executor.schedule(() -> Platform.runLater(() -> {
-                    int pickedHouse = game.getVirtualPlayerPickedHouse();
-                    Labeled houseNode = getHouseNode(pickedHouse, game.getActivePlayerNumber());
-                    sowSeeds(pickedHouse);
-                }), ANIMATION_DELAY*2, TimeUnit.MILLISECONDS);
+                runLater(() -> sowSeeds(game.getVirtualPlayerPickedHouse()));
             }
         }
     }
@@ -174,7 +179,7 @@ public class GameBoardPane implements Initializable  {
      * @param nSowing number of sowing remaining
      */
     private void sowSeeds(int firstHouse, int firstPlayer, int previousHouse, int previousPlayer, int nSowing) {
-        executor.schedule(() -> Platform.runLater(() -> {
+        runLater(() -> {
             if (nSowing == 0) {
                 captureSeeds(previousHouse, previousPlayer);
             } else {
@@ -206,7 +211,30 @@ public class GameBoardPane implements Initializable  {
                 houseNode.setText(String.valueOf(Integer.parseInt(houseNode.getText()) + 1));
                 sowSeeds(firstHouse, firstPlayer, nextHouse, nextPlayer, nextNSowing);
             }
-        }), ANIMATION_DELAY, TimeUnit.MILLISECONDS);
+        });
+    }
+
+    /**
+     * Animates the capture of the seeds
+     *
+     * @param lastHouseUpdated last house updated number
+     * @param lastPlayer player who owns the last house updated
+     */
+    private void captureSeeds(int lastHouseUpdated, int lastPlayer) {
+        // if the last house updated belongs to the opponent, try to capture seeds
+        if (lastPlayer != game.getActivePlayerNumber()) {
+            if(game.captureSeeds(lastHouseUpdated, lastPlayer)) {
+                Labeled houseNode = getHouseNode(lastHouseUpdated, lastPlayer);
+                Labeled stockHouse = getHouseNode(GameBoard.N_HOUSES_PER_PLAYER + 1, game.getActivePlayerNumber());
+                // TODO set style to house node and stock node
+            }
+        }
+        if (game.getStatus() == GameStatus.IN_PROGRESS) {
+            game.switchActivePlayer();
+            turn();
+        } else {
+            Utils.setText(playerMessage, game.getStatus().getMessage());
+        }
     }
 
 
@@ -273,15 +301,11 @@ public class GameBoardPane implements Initializable  {
             if (seedsInHouse > 0) {
                 houseNode.getStyleClass().add("brightened");
                 houseNode.setText("0");
-                executor.schedule(() -> {
-                    Platform.runLater(() -> {
-                        stock.getStyleClass().add("brightened");
-                        stock.setText(String.valueOf(Integer.parseInt(stock.getText()) + seedsInHouse));
-                        executor.schedule(() -> {
-                            collectSeeds(previousHouseNumber, stock, minSeeds, maxSeeds);
-                        }, ANIMATION_DELAY, TimeUnit.MILLISECONDS);
-                    });
-                }, ANIMATION_DELAY, TimeUnit.MILLISECONDS);
+                runLater(() -> {
+                    stock.getStyleClass().add("brightened");
+                    stock.setText(String.valueOf(Integer.parseInt(stock.getText()) + seedsInHouse));
+                    collectSeeds(previousHouseNumber, stock, minSeeds, maxSeeds);
+                });
                 break;
             }
             fromHouseNumber--;
@@ -328,28 +352,7 @@ public class GameBoardPane implements Initializable  {
 
 
 
-    /**
-     * Animates the capture of seeds
-     *
-     * @param lastHouseUpdated last house updated number
-     * @param lastPlayer player who owns the last house updated
-     */
-    private void captureSeeds(int lastHouseUpdated, int lastPlayer) {
-        // if the last house updated belongs to the opponent, try to capture seeds
-        if (lastPlayer != game.getActivePlayerNumber()) {
-            if(game.captureSeeds(lastHouseUpdated, lastPlayer)) {
-                Labeled houseNode = getHouseNode(lastHouseUpdated, lastPlayer);
-                Labeled stockHouse = getHouseNode(GameBoard.N_HOUSES_PER_PLAYER + 1, game.getActivePlayerNumber());
-                // TODO set style to house node and stock node
-            }
-        }
-        if (game.getStatus() == GameStatus.IN_PROGRESS) {
-            game.switchActivePlayer();
-            turn();
-        } else {
-            Utils.setText(playerMessage, game.getStatus().getMessage());
-        }
-    }
+
 
 
     /**
@@ -408,5 +411,12 @@ public class GameBoardPane implements Initializable  {
             }
         }
         throw new IllegalArgumentException(String.format("house number [%d] player number [%d] combination invalid", houseNumber, playerNumber));
+    }
+
+    private void runLater(Runnable lastAnimation) {
+        animations.add(executor.schedule(() -> {
+            animations.pop();
+            Platform.runLater(lastAnimation);
+        }, ANIMATION_DELAY, TimeUnit.MILLISECONDS));
     }
 }
