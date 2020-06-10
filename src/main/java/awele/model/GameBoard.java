@@ -1,19 +1,22 @@
 package awele.model;
 
+import awele.gamelogic.PlayerType;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
 public class GameBoard {
+
     /* GAME BOARD VIEW WITH 2 PLAYERS AND 6 HOUSES PER PLAYER
 
-            houses[]                          stock[]
+        houses[]                              stock[]
         +-----+-----+-----+-----+-----+-----+ +-----+
-        | 11  | 10  |  9  |  8  |  7  |  6  | |  1  |  PLAYER 1 (virtual player)
+        |  5  |  4  |  3  |  2  |  1  |  0  | |  0  |  PLAYER 0 (virtual player)
         +-----+-----+-----+-----+-----+-----+ +-----+
-        |  0  |  1  |  2  |  3  |  4  |  5  | |  0  |  PLAYER 0 (human player)
+        |  6  |  7  |  8  |  9  | 10  | 11  | |  1  |  PLAYER 1 (human player)
         +-----+-----+-----+-----+-----+-----+ +-----+
-     */
+    */
 
     public static final int N_PLAYERS = 2;              // number of players
     public static final int N_HOUSES_PER_PLAYER = 6;    // number of houses belonging to each player
@@ -21,10 +24,33 @@ public class GameBoard {
     private final List<Integer> houses;                       // houses (firsts belongs to player 0 and lasts to player 1)
     private final List<Integer> stocks;                       // seed stocks (0 belongs to player 0 & 1 belongs to player 1)
 
+
+    public GameBoard() {
+        this.houses = new ArrayList<>();
+        houses.add(1);
+        houses.add(1);
+        houses.add(2);
+        houses.add(3);
+        houses.add(4);
+        houses.add(5);
+
+        houses.add(6);
+        houses.add(7);
+        houses.add(8);
+        houses.add(9);
+        houses.add(10);
+        houses.add(11);
+
+        this.stocks = new ArrayList<>();
+        this.stocks.add(0);
+        this.stocks.add(1);
+    }
+
+
     /**
      * Constructor
      */
-    public GameBoard() {
+    public GameBoard(int j) {
         this.houses = new ArrayList<>();
         for (int i = 0; i < N_PLAYERS * N_HOUSES_PER_PLAYER; i++) houses.add(4);
 
@@ -39,9 +65,25 @@ public class GameBoard {
         return new ArrayList<>(this.houses);
     }
 
-    public List<Integer> getHousesValues(int player) {
-        int start = getStartIndex(player);
+    /**
+     * Get houses sublist for a player
+     *
+     * @param player player number (0 for virtual player & 1 for human player)
+     * @return the sublist of houses belonging to the player
+     */
+    public List<Integer> getHousesValuesByPlayer(int player) {
+        int start = getStartIndexForPlayer(player);
         return Collections.unmodifiableList(houses.subList(start, start + N_HOUSES_PER_PLAYER));
+    }
+
+    /**
+     * Get houses sublist for a player
+     *
+     * @param playerType PlayerType enum (VIRTUAL or HUMAN)
+     * @return the sublist of houses belonging to the player
+     */
+    public List<Integer> getHousesValuesByPlayer(PlayerType playerType) {
+        return getHousesValuesByPlayer(playerType.ordinal());
     }
 
     /**
@@ -50,21 +92,8 @@ public class GameBoard {
      * @param index index of the house
      * @return value of the house
      */
-    public int getHouseValue(int index) {
+    public int getHouseValueByIndex(int index) {
         return houses.get(index);
-    }
-
-    /**
-     * Gets the indexes of houses that belongs to a player
-     *
-     * @param player number of the player (0 or 1)
-     * @return a list of the player's house indexes
-     */
-    public List<Integer> getHouseIndexes(int player) {
-        List<Integer> indexes = new ArrayList<>();
-        int start = getStartIndex(player);
-        for (int i = start; i < start + N_HOUSES_PER_PLAYER; i++) indexes.add(i);
-        return indexes;
     }
 
     /**
@@ -73,7 +102,7 @@ public class GameBoard {
      * @param player player number corresponding to his position in the players list
      * @return the first index belonging to th player in the houses array
      */
-    public int getStartIndex(int player) {
+    public int getStartIndexForPlayer(int player) {
         return player * N_HOUSES_PER_PLAYER;
     }
 
@@ -81,12 +110,13 @@ public class GameBoard {
      * @param player player'snumber
      * @return the stock of seeds of the player
      */
-    public int getStock(int player) {
+    public int getStockByPlayer(int player) {
         return stocks.get(player);
     }
 
-    public List<Integer> getStocks() {
-        return stocks;
+
+    public int getStockByPlayer(PlayerType player) {
+        return getStockByPlayer(player.ordinal());
     }
 
     public void updateHouses(List<Integer> newHouses) {
@@ -104,7 +134,7 @@ public class GameBoard {
     }
 
     public void emptyHouses(int player) {
-        int start = getStartIndex(player);
+        int start = getStartIndexForPlayer(player);
         for (int i = 0; i < N_HOUSES_PER_PLAYER; i++) houses.set(start + i, 0);
     }
 

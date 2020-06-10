@@ -3,10 +3,10 @@
 <?import javafx.scene.layout.StackPane?>
 <StackPane xmlns="http://javafx.com/javafx"
            xmlns:fx="http://javafx.com/fxml"
-           fx:controller="awele.ui.javafx.RootStack"
+           fx:controller="awele.javafx.controller.RootStack"
            fx:id="root">
-    <fx:include source="Board.fxml" fx:id="board" />
-    <fx:include source="NewGame.fxml" fx:id="newGame" />
-    <fx:include source="Scores.fxml" fx:id="scores" />
-    <fx:include source="Menu.fxml" fx:id="menu" />
+    <fx:include source="GameBoard.fxml" fx:id="gameBoard"/>
+    <fx:include source="GameSettingsMenu.fxml" fx:id="newGameMenu"/>
+    <fx:include source="ScoresTable.fxml" fx:id="scoreTable"/>
+    <fx:include source="MainMenu.fxml" fx:id="mainMenu"/>
 </StackPane>

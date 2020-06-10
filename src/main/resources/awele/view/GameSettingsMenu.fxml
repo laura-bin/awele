@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+<VBox minWidth="200.0" spacing="5.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="awele.javafx.controller.GameSettingsMenuPane">
+    <userData>
+     <fx:reference source="controller"/>
+ </userData>
+    <children>
+        <Label fx:id="settingsTitle" alignment="CENTER" layoutX="20.0" layoutY="30.0" maxWidth="1.7976931348623157E308"
+               text="NEW_GAME_SETTINGS" textAlignment="CENTER"/>
+        <Label layoutX="20.0" layoutY="204.0" maxWidth="1.7976931348623157E308" text="Difficulty">
+            <font>
+                <Font size="15.0"/>
+            </font>
+        </Label>
+        <RadioButton fx:id="normalMode" mnemonicParsing="false" selected="true" text="NORMAL_MODE">
+            <toggleGroup>
+                <ToggleGroup fx:id="difficulty"/>
+            </toggleGroup>
+        </RadioButton>
+        <RadioButton fx:id="hardMode" layoutX="20.0" layoutY="256.0" mnemonicParsing="false" text="HARD_MODE"
+                     toggleGroup="$difficulty"/>
+        <CheckBox fx:id="wantsToStart" mnemonicParsing="false" text="PLAY_FIRST">
+            <VBox.margin>
+                <Insets top="15.0"/>
+            </VBox.margin>
+        </CheckBox>
+        <HBox/>
+        <Button fx:id="playButton" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#play"
+                text="PLAY"/>
+        <Button fx:id="backButton" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#goBack"
+                text="GO_BACK"/>
+    </children>
+</VBox>
