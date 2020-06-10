@@ -4,10 +4,12 @@ import awele.gamelogic.*;
 import awele.model.GameBoard;
 import awele.ui.GameMessage;
 import javafx.application.Platform;
+import javafx.beans.binding.Bindings;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
+import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.Labeled;
 import javafx.scene.layout.GridPane;
@@ -44,6 +46,8 @@ public class GameBoardPane implements Initializable  {
     private GridPane gridBoard;
     @FXML
     private Label playerMessage;
+    @FXML
+    private CheckBox playableHouseHint;
 
     private RootStack root;
 
@@ -73,6 +77,20 @@ public class GameBoardPane implements Initializable  {
                     currentTimeDuration.toMinutesPart(), currentTimeDuration.toSecondsPart()));
             });
         }, 0, 1, TimeUnit.SECONDS);
+
+
+        playableHouseHint.selectedProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue == oldValue) {
+                System.err.println(".....");
+                return;
+            }
+
+            if (newValue) {
+                gridBoard.getStyleClass().add("display-hints");
+            } else {
+                gridBoard.getStyleClass().remove("display-hints");
+            }
+        });
     }
 
     /**

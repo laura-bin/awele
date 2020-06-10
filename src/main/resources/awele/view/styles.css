@@ -40,6 +40,8 @@ Button:focused {
 
 .player-marker {
     -fx-min-width: 20px;
+    -fx-font-size: 30px;
+    -fx-opacity: 0.7;
 }
 
 .house-button, .stock {
@@ -55,11 +57,19 @@ Button:focused {
     -fx-background-color: lightgray;
 }
 
-.house-button:hover {
+.house-button:disabled {
+    -fx-opacity: 1;
+}
+
+.display-hints .house-button:disabled {
+    -fx-opacity: 0.4;
+}
+
+.display-hints .house-button:hover {
     -fx-border-color: coral;
 }
 
-.house-button:disabled:hover {
+.display-hints .house-button:disabled:hover {
     -fx-border-color: transparent;
 }
 
