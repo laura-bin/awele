@@ -1,3 +1,14 @@
+CheckBox,
+RadioButton {
+    -fx-focus-traversable: false;
+}
+
+Button:focused {
+    -fx-background-color: -fx-outer-border, -fx-inner-border, -fx-body-color;
+}
+
+
+
 .window-title {
     -fx-font-size: 25px;
     -fx-font-family: monospace Monospaced;
@@ -41,8 +52,6 @@
 .house-button {
     -fx-background-radius: 50%;
     -fx-border-radius: 50%;
-    -fx-focus-color: transparent;
-    -fx-faint-focus-color: transparent;
     -fx-background-color: lightgray;
 }
 
