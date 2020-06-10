@@ -4,9 +4,10 @@
 <StackPane xmlns="http://javafx.com/javafx"
            xmlns:fx="http://javafx.com/fxml"
            fx:controller="awele.javafx.controller.RootStack"
+           stylesheets="styles.css"
            fx:id="root">
     <fx:include source="scenebuilder-GameBoard.fxml" fx:id="gameBoard"/>
-    <fx:include source="scenebuilder-GameSettingsMenu.fxml" fx:id="newGameMenu"/>
+    <fx:include source="scenebuilder-GameSettingsMenu.fxml" fx:id="newGameMenu" styleClass="menu"/>
     <fx:include source="scenebuilder-ScoresTable.fxml" fx:id="scoreTable"/>
-    <fx:include source="scenebuilder-MainMenu.fxml" fx:id="mainMenu"/>
+    <fx:include source="scenebuilder-MainMenu.fxml" fx:id="mainMenu" styleClass="menu"/>
 </StackPane>
