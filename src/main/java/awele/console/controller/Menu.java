@@ -50,7 +50,7 @@ public enum Menu {
             sb.append("=".repeat(titleLength));
         } else {
             String titleMessage = String.format(" %s ", title.getText().toUpperCase());
-            sb.append("=".repeat((titleLength - titleMessage.length())/2));
+            sb.append("=".repeat((titleLength - titleMessage.length()) / 2));
             sb.append(titleMessage);
             while (sb.length() < titleLength) {
                 sb.append("=");

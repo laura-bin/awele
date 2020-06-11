@@ -29,6 +29,7 @@ public class Utils {
 
     /**
      * Sets a GameMessage text in a JavaFX view component
+     *
      * @param labeled JavaFX component in which the text have to be set
      * @param message GameMessage to display
      */

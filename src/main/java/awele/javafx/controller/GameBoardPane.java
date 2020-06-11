@@ -1,6 +1,8 @@
 package awele.javafx.controller;
 
-import awele.gamelogic.*;
+import awele.gamelogic.Game;
+import awele.gamelogic.GameStatus;
+import awele.gamelogic.PlayerType;
 import awele.model.GameBoard;
 import awele.ui.GameMessage;
 import javafx.application.Platform;
@@ -30,7 +32,7 @@ import java.util.concurrent.TimeUnit;
     | 1.1 | 1.2 | 1.3 | 1.4 | 1.5 | 1.6 | | 1.7 |  PLAYER 1 (human player)
     +-----+-----+-----+-----+-----+-----+ +-----+
 */
-public class GameBoardPane implements Initializable  {
+public class GameBoardPane implements Initializable {
 
     private static final ScheduledExecutorService executor = Executors.newSingleThreadScheduledExecutor();
     private static final long ANIMATION_DELAY = 600; // time delay for the game animations in milliseconds
@@ -81,7 +83,7 @@ public class GameBoardPane implements Initializable  {
 
                 Duration currentTimeDuration = game.getDuration();
                 duration.setText(String.format("%02d:%02d:%02d", currentTimeDuration.toHours(),
-                    currentTimeDuration.toMinutesPart(), currentTimeDuration.toSecondsPart()));
+                        currentTimeDuration.toMinutesPart(), currentTimeDuration.toSecondsPart()));
             });
         }, 0, 1, TimeUnit.SECONDS);
 
@@ -97,6 +99,7 @@ public class GameBoardPane implements Initializable  {
 
     /**
      * Sets the root stack that manages the navigation in the application
+     *
      * @param root root stack
      */
     public void setRoot(RootStack root) {
@@ -105,6 +108,7 @@ public class GameBoardPane implements Initializable  {
 
     /**
      * Starts the game : sets the game, displays the board and launches the first turn
+     *
      * @param game game that is played
      */
     public void startGame(Game game) {
@@ -153,7 +157,6 @@ public class GameBoardPane implements Initializable  {
             humanPlayerTurnMarker.setText("");
             virtualPlayerTurnMarker.setText("");
             Utils.setText(playerMessage, GameMessage.IMPOSSIBLE_MOVE);
-
             game.collectRemainingSeeds();
             runLater(() -> collectRemainingSeeds(1, game.getActivePlayerNumber(),
                     getHouseNode(GameBoard.N_HOUSES_PER_PLAYER + 1, game.getActivePlayerNumber())));
@@ -195,11 +198,11 @@ public class GameBoardPane implements Initializable  {
      * Sows seed animation in the next house
      * At last launches the animation to capture seeds
      *
-     * @param firstHouse first house from which the sowing starts (kept to avoid sowing in the original house)
-     * @param firstPlayer first player from which the sowing starts (kept to avoid sowing in the original house)
-     * @param previousHouse house in which the last seed has been planted
+     * @param firstHouse     first house from which the sowing starts (kept to avoid sowing in the original house)
+     * @param firstPlayer    first player from which the sowing starts (kept to avoid sowing in the original house)
+     * @param previousHouse  house in which the last seed has been planted
      * @param previousPlayer player who has planted the last seed
-     * @param nSowing number of sowing remaining
+     * @param nSowing        number of sowing remaining
      */
     private void sowSeeds(int firstHouse, int firstPlayer, int previousHouse, int previousPlayer, int nSowing) {
         if (nSowing == 0) {
@@ -252,8 +255,8 @@ public class GameBoardPane implements Initializable  {
      * Capturing seeds animation
      *
      * @param houseNumber house number from which starting the capture
-     * @param fromPlayer player who owns the house from which capture seeds
-     * @param stockNode Labeled stock in which the seeds must be added
+     * @param fromPlayer  player who owns the house from which capture seeds
+     * @param stockNode   Labeled stock in which the seeds must be added
      */
     private void captureSeeds(int houseNumber, int fromPlayer, Labeled stockNode) {
         Labeled houseNode = getHouseNode(houseNumber, fromPlayer);
@@ -277,9 +280,9 @@ public class GameBoardPane implements Initializable  {
     /**
      * Collect remaining seeds animation
      *
-     * @param houseNumber house number from which starting the collect
+     * @param houseNumber  house number from which starting the collect
      * @param playerNumber player who owns the house from which capture seeds
-     * @param stockNode Labeled stock in which the seeds must be added
+     * @param stockNode    Labeled stock in which the seeds must be added
      */
     private void collectRemainingSeeds(int houseNumber, int playerNumber, Labeled stockNode) {
         if (houseNumber <= GameBoard.N_HOUSES_PER_PLAYER) {
@@ -359,7 +362,7 @@ public class GameBoardPane implements Initializable  {
      * Disables all human player's houses
      */
     private void setDisableHumanPlayerHouses() {
-        setDisableHumanPlayerHouses(new ArrayList<>());
+        setDisableHumanPlayerHouses(Collections.emptyList());
     }
 
     /**
@@ -389,14 +392,14 @@ public class GameBoardPane implements Initializable  {
     }
 
     /**
-     * @param houseNumber house number
+     * @param houseNumber  house number
      * @param playerNumber player number (0 for virtual player & 1 for human player)
      * @return the house node from the grid associated to the player / house number combination
      */
     private Labeled getHouseNode(int houseNumber, int playerNumber) {
         if (playerNumber == 1 || houseNumber == GameBoard.N_HOUSES_PER_PLAYER + 1) {
             for (Node node : gridBoard.getChildren()) {
-                if (GridPane.getRowIndex(node) == playerNumber && GridPane.getColumnIndex(node) == houseNumber ) {
+                if (GridPane.getRowIndex(node) == playerNumber && GridPane.getColumnIndex(node) == houseNumber) {
                     return (Labeled) node;
                 }
             }
@@ -414,7 +417,7 @@ public class GameBoardPane implements Initializable  {
     /**
      * Adds an animation in the queue of the application,
      * saves the animation in a list to cancel it on going back
-     * adn removes it from the list when it is launched
+     * and removes it from the list when it is launched
      *
      * @param animation Runnable animation
      */

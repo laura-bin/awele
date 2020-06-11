@@ -130,6 +130,7 @@ public class ConsoleGameController {
 
     /**
      * Wait an integer on the standard input
+     *
      * @return the house number picked by the human player
      */
     private int waitNumber() {

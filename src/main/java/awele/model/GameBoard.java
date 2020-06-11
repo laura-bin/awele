@@ -24,28 +24,6 @@ public class GameBoard {
     private final List<Integer> houses; // houses (firsts belongs to player 0 and lasts to player 1)
     private final List<Integer> stocks; // seed stocks (0 belongs to player 0 & 1 belongs to player 1)
 
-
-    public GameBoard(int j) {
-        this.houses = new ArrayList<>();
-        houses.add(0);
-        houses.add(0);
-        houses.add(0);
-        houses.add(0);
-        houses.add(2);
-        houses.add(0);
-
-        houses.add(1);
-        houses.add(0);
-        houses.add(0);
-        houses.add(0);
-        houses.add(1);
-        houses.add(20);
-
-        this.stocks = new ArrayList<>();
-        this.stocks.add(0);
-        this.stocks.add(1);
-    }
-
     /**
      * Constructor
      */
@@ -133,7 +111,7 @@ public class GameBoard {
     /**
      * Add seeds to a player's stock
      *
-     * @param player player number
+     * @param player     player number
      * @param seedsToAdd seeds to add to the player's stock
      */
     public void addToStock(int player, int seedsToAdd) {

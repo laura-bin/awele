@@ -6,6 +6,7 @@ public class ScoreTablePane {
 
     /**
      * Sets the root stack that manages the navigation in the application
+     *
      * @param root root stack
      */
     public void setRoot(RootStack root) {

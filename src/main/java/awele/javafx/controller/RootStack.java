@@ -59,7 +59,8 @@ public class RootStack implements Initializable {
 
     /**
      * Create a new game and sets the game board visible
-     * @param difficulty game difficulty chosen by the human player
+     *
+     * @param difficulty   game difficulty chosen by the human player
      * @param wantsToStart does the human player want to be the first to play
      */
     public void setGameBoardVisible(DifficultyLevel difficulty, boolean wantsToStart) {

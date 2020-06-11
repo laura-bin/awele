@@ -40,6 +40,7 @@ public class GameSettingsMenuPane implements Initializable {
 
     /**
      * Sets the root stack that manages the navigation in the application
+     *
      * @param root root stack
      */
     public void setRoot(RootStack root) {
@@ -53,7 +54,7 @@ public class GameSettingsMenuPane implements Initializable {
         DifficultyLevel difficulty;
         if (normalMode.isSelected()) {
             difficulty = DifficultyLevel.NORMAL;
-        } else if (hardMode.isSelected()){
+        } else if (hardMode.isSelected()) {
             difficulty = DifficultyLevel.HARD;
         } else {
             throw new IllegalStateException("invalid state, neither normal nor hard difficulty selected");

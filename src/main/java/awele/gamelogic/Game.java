@@ -18,7 +18,7 @@ public class Game {
     /**
      * Constructor
      *
-     * @param difficulty DifficultyType NORMAL or HARD that determines the virtual player added to the game
+     * @param difficulty  DifficultyType NORMAL or HARD that determines the virtual player added to the game
      * @param humanStarts does the human player wants to start (boolean)
      */
     public Game(DifficultyLevel difficulty, boolean humanStarts) {
@@ -54,7 +54,7 @@ public class Game {
     }
 
     public int getActivePlayerNumber() {
-        return  activePlayer;
+        return activePlayer;
     }
 
     /**
@@ -172,7 +172,7 @@ public class Game {
     /**
      * Capture seeds in the opponent's houses
      *
-     * @param lastHouse last house updated
+     * @param lastHouse  last house updated
      * @param lastPlayer player who owns the last house update
      */
     public boolean captureSeeds(int lastHouse, int lastPlayer) {
@@ -213,6 +213,7 @@ public class Game {
 
     /**
      * Ends game by setting a GameStatus and stops the game chronometer
+     *
      * @param status GameStatus to set
      */
     public void end(GameStatus status) {
@@ -294,7 +295,7 @@ public class Game {
      * +-----+-----+-----+-----+-----+-----+       +-----+-----+-----+-----+-----+-----+
      *
      * @param houseNumber house number to convert (between 1 & GameBoard.N_HOUSES_PER_PLAYER
-     * @param player player number (0 for virtual player & 1 for human)
+     * @param player      player number (0 for virtual player & 1 for human)
      * @return index of the house in the list of houses of the board
      */
     private int convertHouseNumberToHouseIndex(int houseNumber, int player) {
