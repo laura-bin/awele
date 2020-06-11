@@ -85,22 +85,19 @@ public class Game {
         // if all the opponent houses are empty, the player must feed the opponent
         if (isStarved(getOpponentNumber(), board.getHouses())) {
             for (int houseNumber = 1; houseNumber <= GameBoard.N_HOUSES_PER_PLAYER; houseNumber++) {
-                if (board.getHouseValueByIndex(convertHouseNumberToHouseIndex(houseNumber, activePlayer))
-                        >= GameBoard.N_HOUSES_PER_PLAYER - houseNumber - 1) {
+                if (getHouseValue(houseNumber, activePlayer) > GameBoard.N_HOUSES_PER_PLAYER - houseNumber) {
                     eligibleHouseNumbers.add(houseNumber);
                 }
             }
         } else {
             for (int houseNumber = 1; houseNumber <= GameBoard.N_HOUSES_PER_PLAYER; houseNumber++) {
-                if (board.getHouseValueByIndex(convertHouseNumberToHouseIndex(houseNumber, activePlayer)) > 0) {
+                if (getHouseValue(houseNumber, activePlayer) > 0) {
                     eligibleHouseNumbers.add(houseNumber);
                 }
             }
         }
         return eligibleHouseNumbers;
     }
-
-
 
     /**
      * Sows seeds and capture opponent seeds if possible
@@ -318,7 +315,7 @@ public class Game {
     /**
      * Gets house value by player number and house number
      */
-    public int getHouseValue(int house, int player) {
+    private int getHouseValue(int house, int player) {
         return board.getHouseValueByIndex(convertHouseNumberToHouseIndex(house, player));
     }
 

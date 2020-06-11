@@ -27,19 +27,19 @@ public class GameBoard {
 
     public GameBoard() {
         this.houses = new ArrayList<>();
-        houses.add(1);
-        houses.add(1);
-        houses.add(2);
-        houses.add(3);
-        houses.add(4);
-        houses.add(5);
+        houses.add(0);
+        houses.add(0);
+        houses.add(0);
+        houses.add(0);
+        houses.add(0);
+        houses.add(0);
 
-        houses.add(6);
-        houses.add(7);
-        houses.add(8);
-        houses.add(9);
-        houses.add(10);
-        houses.add(11);
+        houses.add(2);
+        houses.add(1);
+        houses.add(0);
+        houses.add(0);
+        houses.add(1);
+        houses.add(0);
 
         this.stocks = new ArrayList<>();
         this.stocks.add(0);

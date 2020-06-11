@@ -87,3 +87,7 @@ Button:focused {
 .brightened {
     -fx-border-color: green;
 }
+
+.captured {
+    -fx-background-color: lightblue;
+}

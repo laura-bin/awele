@@ -16,6 +16,7 @@ public enum GameMessage {
     PICK_HOUSE("Pick a house for sowing."),
     VIRTUAL_PLAYER_CHOICE("Virtual player picked house %d."),
     IMPOSSIBLE_MOVE("Impossible to play."),
+    CAPTURE_NOT_ALLOWED("The capture is forbidden : it will starve the opponent."),
     WIN("You win !"),
     DRAW("Draw : both players have collected the same amount of seeds."),
     LOSE("Virtual player wins !"),

@@ -103,7 +103,7 @@
       <HBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" spacing="10.0">
          <children>
               <Label fx:id="playerMessage" alignment="BOTTOM_LEFT" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" HBox.hgrow="ALWAYS" />
-            <CheckBox fx:id="playableHouseHint" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" nodeOrientation="RIGHT_TO_LEFT" text="Display playable houses" />
+            <CheckBox fx:id="playableHouseHint" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" nodeOrientation="RIGHT_TO_LEFT" text="Display eligible houses" />
          </children>
       </HBox>
         <Button maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#goBack" text="GO_BACK" />
