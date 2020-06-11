@@ -7,8 +7,6 @@ Button:focused {
     -fx-background-color: -fx-outer-border, -fx-inner-border, -fx-body-color;
 }
 
-
-
 .window-title {
     -fx-font-size: 25px;
     -fx-font-family: monospace Monospaced;
@@ -26,35 +24,49 @@ Button:focused {
 
 .menu Button {
     -fx-min-height: 8ex;
+    -fx-font-size: 16px;
+    -fx-font-family: monospace Monospaced;
 }
 
+.settings-menu {
+    -fx-font-family: monospace Monospaced;
+    -fx-font-size: 16px;
+}
 
+/* Board */
 
-
-
-/*
- *
- * Board
- *
- */
+.game-duration {
+    -fx-font-family: monospace Monospaced;
+    -fx-font-size: 18px;
+}
 
 .player-marker {
     -fx-min-width: 20px;
-    -fx-font-size: 30px;
-    -fx-opacity: 0.7;
+    -fx-font-family: monospace Monospaced;
+    -fx-font-weight: bolder;
+    -fx-font-size: 32px;
+    -fx-text-fill: #4f9a94;
 }
 
 .house-button, .stock {
+    -fx-font-family: monospace Monospaced;
+    -fx-font-size: 24px;
+    -fx-background-radius: 50%;
+    -fx-border-radius: 50%;
     -fx-min-width: 100px;
     -fx-min-height: 100px;
     -fx-padding: 20px;
-    -fx-font-size: 20px;
 }
 
 .house-button {
-    -fx-background-radius: 50%;
-    -fx-border-radius: 50%;
-    -fx-background-color: lightgray;
+    -fx-background-color: #b2dfdb;
+}
+
+.stock {
+    -fx-font-weight: bold;
+    -fx-background-color: #4f9a94;
+    -fx-border-color: #4f9a94;
+    -fx-border-width: 400%;
 }
 
 .house-button:disabled {
@@ -62,32 +74,43 @@ Button:focused {
 }
 
 .display-hints .house-button:disabled {
-    -fx-opacity: 0.4;
+    -fx-opacity: 0.6;
 }
 
 .display-hints .house-button:hover {
-    -fx-border-color: coral;
+    -fx-border-color: #4f9a94;
 }
 
 .display-hints .house-button:disabled:hover {
     -fx-border-color: transparent;
 }
 
-.stock {
-    -fx-background-color: lightblue;
-    -fx-background-radius: 30% / 80%;
-    -fx-min-width: 80px;
-}
+
 
 
 .picked {
-    -fx-background-color: lightcoral;
+    -fx-background-color: #4f9a94;
 }
 
 .brightened {
-    -fx-border-color: green;
+    -fx-border-color: #4f9a94;
 }
 
 .captured {
-    -fx-background-color: lightblue;
+    -fx-background-color: #80cbc4;
+}
+
+.stock-update{
+    -fx-background-color: #82ada9;
+}
+
+.board-button {
+    -fx-min-height: 4ex;
+    -fx-font-size: 18px;
+    -fx-font-family: monospace Monospaced;
+}
+
+.board-message {
+    -fx-font-size: 14px;
+    -fx-font-family: monospace Monospaced;
 }

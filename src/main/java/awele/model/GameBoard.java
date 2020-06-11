@@ -21,36 +21,35 @@ public class GameBoard {
     public static final int N_PLAYERS = 2;              // number of players
     public static final int N_HOUSES_PER_PLAYER = 6;    // number of houses belonging to each player
 
-    private final List<Integer> houses;                       // houses (firsts belongs to player 0 and lasts to player 1)
-    private final List<Integer> stocks;                       // seed stocks (0 belongs to player 0 & 1 belongs to player 1)
+    private final List<Integer> houses; // houses (firsts belongs to player 0 and lasts to player 1)
+    private final List<Integer> stocks; // seed stocks (0 belongs to player 0 & 1 belongs to player 1)
 
 
-    public GameBoard() {
+    public GameBoard(int j) {
         this.houses = new ArrayList<>();
         houses.add(0);
         houses.add(0);
         houses.add(0);
         houses.add(0);
-        houses.add(0);
+        houses.add(2);
         houses.add(0);
 
-        houses.add(2);
         houses.add(1);
         houses.add(0);
         houses.add(0);
-        houses.add(1);
         houses.add(0);
+        houses.add(1);
+        houses.add(20);
 
         this.stocks = new ArrayList<>();
         this.stocks.add(0);
         this.stocks.add(1);
     }
 
-
     /**
      * Constructor
      */
-    public GameBoard(int j) {
+    public GameBoard() {
         this.houses = new ArrayList<>();
         for (int i = 0; i < N_PLAYERS * N_HOUSES_PER_PLAYER; i++) houses.add(4);
 
@@ -114,11 +113,19 @@ public class GameBoard {
         return stocks.get(player);
     }
 
-
+    /**
+     * @param player player'snumber
+     * @return the stock of seeds of the player
+     */
     public int getStockByPlayer(PlayerType player) {
         return getStockByPlayer(player.ordinal());
     }
 
+    /**
+     * Saves new houses values in the houses list
+     *
+     * @param newHouses newHouses list to save
+     */
     public void updateHouses(List<Integer> newHouses) {
         Collections.copy(houses, newHouses);
     }
@@ -126,7 +133,7 @@ public class GameBoard {
     /**
      * Add seeds to a player's stock
      *
-     * @param player     player number
+     * @param player player number
      * @param seedsToAdd seeds to add to the player's stock
      */
     public void addToStock(int player, int seedsToAdd) {

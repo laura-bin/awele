@@ -17,20 +17,16 @@
         <Label fx:id="settingsTitle" alignment="CENTER" layoutX="20.0" layoutY="30.0" maxWidth="1.7976931348623157E308" styleClass="window-title" text="NEW_GAME_SETTINGS" textAlignment="CENTER" />
       <VBox spacing="5.0">
          <children>
-              <Label maxWidth="1.7976931348623157E308" text="Difficulty">
-                  <font>
-                      <Font size="15.0" />
-                  </font>
-              </Label>
-              <RadioButton fx:id="normalMode" maxWidth="1.7976931348623157E308" mnemonicParsing="false" selected="true" text="NORMAL_MODE">
+              <Label styleClass="settings-menu" maxWidth="1.7976931348623157E308" text="Difficulty" />
+              <RadioButton fx:id="normalMode" styleClass="settings-menu" maxWidth="1.7976931348623157E308" mnemonicParsing="false" selected="true" text="NORMAL_MODE">
                   <toggleGroup>
                       <ToggleGroup fx:id="difficulty" />
                   </toggleGroup>
               </RadioButton>
-              <RadioButton fx:id="hardMode" maxWidth="1.7976931348623157E308" mnemonicParsing="false" text="HARD_MODE" toggleGroup="$difficulty" />
+              <RadioButton disable="true" fx:id="hardMode" styleClass="settings-menu" maxWidth="1.7976931348623157E308" mnemonicParsing="false" text="HARD_MODE" toggleGroup="$difficulty" />
          </children>
       </VBox>
-        <CheckBox fx:id="wantsToStart" maxWidth="1.7976931348623157E308" mnemonicParsing="false" text="PLAY_FIRST">
+        <CheckBox fx:id="wantsToStart" styleClass="settings-menu" maxWidth="1.7976931348623157E308" mnemonicParsing="false" selected="true" text="PLAY_FIRST">
             <VBox.margin>
                 <Insets top="15.0" />
             </VBox.margin>

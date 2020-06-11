@@ -186,7 +186,12 @@ public class Game {
         activePlayer = getOpponentNumber();
     }
 
-    // TODO 2 types of end when it's impossible to play
+    /**
+     * When the opponent is starved and the active player can't feed him,
+     * collects the remaining seeds in the houses of the active player
+     * and add them to his stock house.
+     * At last, sets the end status of the game (sets the winner).
+     */
     public void collectRemainingSeeds() {
         List<Integer> houses = board.getHousesValuesByPlayer(activePlayer);
         int seedsToAdd = 0;
@@ -213,10 +218,6 @@ public class Game {
     public void end(GameStatus status) {
         this.status = status;
         this.duration = Duration.ofNanos(System.nanoTime() - start);
-    }
-
-    public List<Integer> getActivePlayerHouses() {
-        return board.getHousesValuesByPlayer(activePlayer);
     }
 
     /**
@@ -279,23 +280,11 @@ public class Game {
     }
 
     /**
-     * +-----+-----+-----+-----+       +-----+-----+-----+-----+
-     * |  3  |  2  |  1  |  0  |       |  4  |  3  |  2  |  1  |
-     * +-----+-----+-----+-----+  ==>  +-----+-----+-----+-----+
-     * |  4  |  5  |  6  |  7  |       |  1  |  2  |  3  |  4  |
-     * +-----+-----+-----+-----+       +-----+-----+-----+-----+
-     *
-     * @param houseIndex index of the house in the board array houses
-     * @return house number that can be picked by a player between 1 and nHouses
+     * Gets house value by player number and house number
      */
-    private int convertHouseIndexToHouseNumber(int houseIndex) {
-        return houseIndex - GameBoard.N_HOUSES_PER_PLAYER * activePlayer + 1;
+    private int getHouseValue(int house, int player) {
+        return board.getHouseValueByIndex(convertHouseNumberToHouseIndex(house, player));
     }
-
-    private int convertHouseIndexToHouseNumber(int houseIndex, int player) {
-        return houseIndex - player * GameBoard.N_HOUSES_PER_PLAYER + 1;
-    }
-
 
     /**
      * +-----+-----+-----+-----+-----+-----+       +-----+-----+-----+-----+-----+-----+
@@ -310,13 +299,6 @@ public class Game {
      */
     private int convertHouseNumberToHouseIndex(int houseNumber, int player) {
         return houseNumber + player * GameBoard.N_HOUSES_PER_PLAYER - 1;
-    }
-
-    /**
-     * Gets house value by player number and house number
-     */
-    private int getHouseValue(int house, int player) {
-        return board.getHouseValueByIndex(convertHouseNumberToHouseIndex(house, player));
     }
 
 }

@@ -47,6 +47,10 @@ public class GameBoardPane implements Initializable  {
     private Label playerMessage;
     @FXML
     private CheckBox playableHouseHint;
+    @FXML
+    private Button goBackButton;
+    @FXML
+    private Button quitButton;
 
     private RootStack root;
 
@@ -57,6 +61,9 @@ public class GameBoardPane implements Initializable  {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        Utils.setText(goBackButton);
+        Utils.setText(quitButton);
+
         // set onAction method on each human player's house
         for (Node node : gridBoard.getChildren()) {
             Integer columnIndex = GridPane.getColumnIndex(node);
@@ -205,7 +212,6 @@ public class GameBoardPane implements Initializable  {
                 });
             } else {
                 runLater(() -> {
-                    Utils.setText(playerMessage, GameMessage.CAPTURE_NOT_ALLOWED);
                     continueGame();
                 });
             }
@@ -251,16 +257,16 @@ public class GameBoardPane implements Initializable  {
      */
     private void captureSeeds(int houseNumber, int fromPlayer, Labeled stockNode) {
         Labeled houseNode = getHouseNode(houseNumber, fromPlayer);
-        int seedsInHouse = Integer.parseInt(houseNode.getText());
-
-        if (houseNumber > 0 && seedsInHouse >= 2 && seedsInHouse <= 3) {
+        int seedsInHouse = 0;
+        if (houseNumber > 0) seedsInHouse = Integer.parseInt(houseNode.getText());
+        if (seedsInHouse >= 2 && seedsInHouse <= 3) {
             int previousHouseNumber = houseNumber - 1;
-
+            int seeds = seedsInHouse;
             houseNode.getStyleClass().add("captured");
             houseNode.setText("0");
             runLater(() -> {
-                stockNode.getStyleClass().add("brightened");
-                stockNode.setText(String.valueOf(Integer.parseInt(stockNode.getText()) + seedsInHouse));
+                stockNode.getStyleClass().add("stock-update");
+                stockNode.setText(String.valueOf(Integer.parseInt(stockNode.getText()) + seeds));
                 runLater(() -> captureSeeds(previousHouseNumber, fromPlayer, stockNode));
             });
         } else {
@@ -321,7 +327,7 @@ public class GameBoardPane implements Initializable  {
         runLater(() -> {
             displayBoard();
             Utils.setText(playerMessage, game.getStatus().getMessage());
-            // TODO -> scores
+            // TODO -> scores / go back ?
         });
     }
 
@@ -375,9 +381,10 @@ public class GameBoardPane implements Initializable  {
      */
     private void removeHousesStyles() {
         for (Node node : gridBoard.getChildren()) {
-            node.getStyleClass().remove("brightened");
-            node.getStyleClass().remove("picked");
-            node.getStyleClass().remove("captured");
+            while (node.getStyleClass().contains("brightened")) node.getStyleClass().remove("brightened");
+            while (node.getStyleClass().contains("picked")) node.getStyleClass().remove("picked");
+            while (node.getStyleClass().contains("captured")) node.getStyleClass().remove("captured");
+            while (node.getStyleClass().contains("stock-update")) node.getStyleClass().remove("stock-update");
         }
     }
 
@@ -387,16 +394,16 @@ public class GameBoardPane implements Initializable  {
      * @return the house node from the grid associated to the player / house number combination
      */
     private Labeled getHouseNode(int houseNumber, int playerNumber) {
-        if (playerNumber == 0) {
+        if (playerNumber == 1 || houseNumber == GameBoard.N_HOUSES_PER_PLAYER + 1) {
             for (Node node : gridBoard.getChildren()) {
-                if (GridPane.getRowIndex(node) == playerNumber
-                        && GridPane.getColumnIndex(node) == GameBoard.N_HOUSES_PER_PLAYER - houseNumber + 1) {
+                if (GridPane.getRowIndex(node) == playerNumber && GridPane.getColumnIndex(node) == houseNumber ) {
                     return (Labeled) node;
                 }
             }
         } else {
             for (Node node : gridBoard.getChildren()) {
-                if (GridPane.getRowIndex(node) == playerNumber && GridPane.getColumnIndex(node) == houseNumber ) {
+                if (GridPane.getRowIndex(node) == playerNumber
+                        && GridPane.getColumnIndex(node) == GameBoard.N_HOUSES_PER_PLAYER - houseNumber + 1) {
                     return (Labeled) node;
                 }
             }
