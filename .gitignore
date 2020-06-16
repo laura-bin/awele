@@ -1,0 +1,20 @@
+# Default ignored files
+/shelf/
+/.idea/workspace.xml
+# Datasource local storage ignored files
+/dataSources/
+/dataSources.local.xml
+# Editor-based HTTP Client requests
+/httpRequests/
+
+/analyse/awele_analyse_UML.aux
+/analyse/awele_analyse_UML.fdb_latexmk
+/analyse/awele_analyse_UML.fls
+/analyse/awele_analyse_UML.log
+/analyse/awele_analyse_UML.out
+/analyse/awele_analyse_UML.synctex.gz
+/analyse/awele_analyse_UML.toc
+
+/target/
+
+.idea/

@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.StackPane?>
+<StackPane xmlns="http://javafx.com/javafx"
+           xmlns:fx="http://javafx.com/fxml"
+           fx:controller="awele.javafx.controller.RootStack"
+           fx:id="root">
+    <fx:include source="GameBoard.fxml" fx:id="gameBoard"/>
+    <fx:include source="GameSettingsMenu.fxml" fx:id="newGameMenu" styleClass="menu"/>
+    <fx:include source="ScoresTable.fxml" fx:id="scoreTable"/>
+    <fx:include source="MainMenu.fxml" fx:id="mainMenu" styleClass="menu"/>
+</StackPane>
