@@ -157,7 +157,7 @@ public class GameBoardPane implements Initializable {
             humanPlayerTurnMarker.setText("");
             virtualPlayerTurnMarker.setText("");
             Utils.setText(playerMessage, GameMessage.IMPOSSIBLE_MOVE);
-            game.collectRemainingSeeds();
+            game.collectRemainingSeeds(game.getActivePlayerNumber());
             runLater(() -> collectRemainingSeeds(1, game.getActivePlayerNumber(),
                     getHouseNode(GameBoard.N_HOUSES_PER_PLAYER + 1, game.getActivePlayerNumber())));
         } else {
@@ -188,7 +188,7 @@ public class GameBoardPane implements Initializable {
         int player = game.getActivePlayerNumber();
 
         setDisableHumanPlayerHouses();
-        game.sowSeeds(pickedHouse);
+        game.sowSeeds(pickedHouse, game.getActivePlayerNumber());
         houseNode.getStyleClass().add("picked");
         houseNode.setText("0");
         sowSeeds(pickedHouse, player, pickedHouse, player, nSowing);
@@ -208,7 +208,7 @@ public class GameBoardPane implements Initializable {
         if (nSowing == 0) {
             // capture seeds and if the last house updated belongs to the opponent and the capture doesn't starved him,
             // launch the animation
-            if (previousPlayer != game.getActivePlayerNumber() && game.captureSeeds(previousHouse, previousPlayer)) {
+            if (previousPlayer != game.getActivePlayerNumber() && game.captureSeeds(previousHouse, previousPlayer) > 0) {
                 runLater(() -> {
                     Labeled stockNode = getHouseNode(GameBoard.N_HOUSES_PER_PLAYER + 1, game.getActivePlayerNumber());
                     captureSeeds(previousHouse, previousPlayer, stockNode);
@@ -328,6 +328,7 @@ public class GameBoardPane implements Initializable {
      */
     private void end() {
         runLater(() -> {
+            removeHousesStyles();
             displayBoard();
             Utils.setText(playerMessage, game.getStatus().getMessage());
             // TODO -> scores / go back ?
