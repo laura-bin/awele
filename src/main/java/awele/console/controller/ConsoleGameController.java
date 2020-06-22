@@ -70,7 +70,7 @@ public class ConsoleGameController {
             // if no move is possible, display the right message, collect remaining seeds adn end game
             if (eligibleHouses.isEmpty()) {
                 displayMessage(GameMessage.IMPOSSIBLE_MOVE);
-                game.collectRemainingSeeds();
+                game.collectRemainingSeeds(game.getActivePlayerNumber());
             } else {
                 int pickedHouse;
                 int lastHouseIndex;
@@ -94,7 +94,7 @@ public class ConsoleGameController {
                     displayMessage(GameMessage.VIRTUAL_PLAYER_CHOICE, pickedHouse);
                 }
 
-                lastHouseIndex = game.sowSeeds(pickedHouse);
+                lastHouseIndex = game.sowSeeds(pickedHouse, game.getActivePlayerNumber());
                 game.captureSeeds(lastHouseIndex);
                 game.switchActivePlayer();
                 displayBoard(game.getGameBoard());

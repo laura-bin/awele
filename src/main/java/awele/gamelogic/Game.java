@@ -12,7 +12,7 @@ public class Game {
     private VirtualPlayer virtualPlayer;    // virtual player (easy or hard)
     private int activePlayer;               // active player number : 0 for human player and 1 for virtual player
     private GameStatus status;              // game status in progress / end
-    private final long start;               // time at which the game started
+    private long start;                     // time at which the game started
     private Duration duration;              // game duration
 
     /**
@@ -36,6 +36,12 @@ public class Game {
 
         this.activePlayer = humanStarts ? PlayerType.HUMAN.ordinal() : PlayerType.VIRTUAL.ordinal();
 
+        this.status = GameStatus.IN_PROGRESS;
+    }
+
+
+    public Game(GameBoard board) {
+        this.board = board;
         this.status = GameStatus.IN_PROGRESS;
     }
 
@@ -73,31 +79,41 @@ public class Game {
     }
 
     public int getVirtualPlayerPickedHouse() {
-        return virtualPlayer.pickHouseForSowing(getActivePlayerEligibleHouseNumbers());
+        return virtualPlayer.pickHouseForSowing(this);
     }
 
     /**
-     * @return List of Integer (between 1&6) that can be picked by the player for sowing
+     * @return List of Integer (between 1&6) that can be picked by the active player for sowing
      */
     public List<Integer> getActivePlayerEligibleHouseNumbers() {
+        return getEligibleHouseNumbers(activePlayer);
+
+    }
+
+    /**
+     * @return List of Integer (between 1&6) that can be picked by the given player for sowing
+     */
+    public List<Integer> getEligibleHouseNumbers(int player) {
         List<Integer> eligibleHouseNumbers = new ArrayList<>();
 
         // if all the opponent houses are empty, the player must feed the opponent
-        if (isStarved(getOpponentNumber(), board.getHouses())) {
+        if (isStarved(getOpponent(player), board.getHouses())) {
             for (int houseNumber = 1; houseNumber <= GameBoard.N_HOUSES_PER_PLAYER; houseNumber++) {
-                if (getHouseValue(houseNumber, activePlayer) > GameBoard.N_HOUSES_PER_PLAYER - houseNumber) {
+                if (getHouseValue(houseNumber, player) > GameBoard.N_HOUSES_PER_PLAYER - houseNumber) {
                     eligibleHouseNumbers.add(houseNumber);
                 }
             }
         } else {
             for (int houseNumber = 1; houseNumber <= GameBoard.N_HOUSES_PER_PLAYER; houseNumber++) {
-                if (getHouseValue(houseNumber, activePlayer) > 0) {
+                if (getHouseValue(houseNumber, player) > 0) {
                     eligibleHouseNumbers.add(houseNumber);
                 }
             }
         }
+
         return eligibleHouseNumbers;
     }
+
 
     /**
      * Sows seeds and capture opponent seeds if possible
@@ -105,9 +121,10 @@ public class Game {
      * @param fromHouseNumber house number picked by the player from which to start sowing
      * @return the last house index updated
      */
-    public int sowSeeds(int fromHouseNumber) {
+    public int sowSeeds(int fromHouseNumber, int player) {
         List<Integer> houses = board.getHouses();
-        int startIndex = convertHouseNumberToHouseIndex(fromHouseNumber, activePlayer);
+
+        int startIndex = convertHouseNumberToHouseIndex(fromHouseNumber, player);
         int nSowing = houses.get(startIndex);
         int houseToUpdateIndex = startIndex;
 
@@ -128,15 +145,15 @@ public class Game {
      * Capture seeds in the opponent's houses
      *
      * @param fromHouseIndex last house index where a seed was sowed
-     * @return true if seeds if seeds could be captured
+     * @return the number of seeds captured
      */
-    public boolean captureSeeds(int fromHouseIndex) {
-        int opponent = getOpponentNumber();
+    public int captureSeeds(int fromHouseIndex) {
+        int opponent = getOpponent(activePlayer);
+        int seedsCaptured = 0;
 
         // does the last house belong to the opponent ?
         if (isOpposingHouse(fromHouseIndex)) {
             List<Integer> newHouses = board.getHouses();
-            int seedsToAdd = 0;
 
             // capture seeds max to the first index of the opponent
             while (fromHouseIndex >= board.getStartIndexForPlayer(opponent)) {
@@ -146,7 +163,7 @@ public class Game {
                 if (houseValue > 3 || houseValue < 2) break;
                 else {
                     // capture seeds
-                    seedsToAdd += houseValue;
+                    seedsCaptured += houseValue;
                     newHouses.set(fromHouseIndex, 0);
                 }
 
@@ -156,17 +173,16 @@ public class Game {
             // if the opponent isn't starved by the capture, the capture is allowed
             if (!isStarved(opponent, newHouses)) {
                 board.updateHouses(newHouses);
-                board.addToStock(activePlayer, seedsToAdd);
+                board.addToStock(activePlayer, seedsCaptured);
 
                 // check if there is a winner
                 if (board.getStockByPlayer(PlayerType.HUMAN) > 24) end(GameStatus.END_WIN);
                 if (board.getStockByPlayer(PlayerType.VIRTUAL) > 24) end(GameStatus.END_LOSE);
                 if (board.getStockByPlayer(PlayerType.HUMAN) == 24 & board.getStockByPlayer(PlayerType.VIRTUAL) == 24)
                     end(GameStatus.END_DRAW);
-                return true;
             }
         }
-        return false;
+        return seedsCaptured;
     }
 
     /**
@@ -175,7 +191,7 @@ public class Game {
      * @param lastHouse  last house updated
      * @param lastPlayer player who owns the last house update
      */
-    public boolean captureSeeds(int lastHouse, int lastPlayer) {
+    public int captureSeeds(int lastHouse, int lastPlayer) {
         return captureSeeds(convertHouseNumberToHouseIndex(lastHouse, lastPlayer));
     }
 
@@ -183,7 +199,7 @@ public class Game {
      * Switches the active player number
      */
     public void switchActivePlayer() {
-        activePlayer = getOpponentNumber();
+        activePlayer = getOpponent(activePlayer);
     }
 
     /**
@@ -192,14 +208,14 @@ public class Game {
      * and add them to his stock house.
      * At last, sets the end status of the game (sets the winner).
      */
-    public void collectRemainingSeeds() {
-        List<Integer> houses = board.getHousesValuesByPlayer(activePlayer);
+    public int collectRemainingSeeds(int player) {
+        List<Integer> houses = board.getHousesValuesByPlayer(player);
         int seedsToAdd = 0;
 
         // collect remaining seeds
         for (int house : houses) seedsToAdd += house;
-        board.addToStock(activePlayer, seedsToAdd);
-        board.emptyHouses(activePlayer);
+        board.addToStock(player, seedsToAdd);
+        board.emptyHouses(player);
 
         // set the winner
         if (board.getStockByPlayer(PlayerType.HUMAN) > board.getStockByPlayer(PlayerType.HUMAN)) {
@@ -209,6 +225,8 @@ public class Game {
         } else {
             end(GameStatus.END_DRAW);
         }
+
+        return seedsToAdd;
     }
 
     /**
@@ -222,12 +240,12 @@ public class Game {
     }
 
     /**
-     * Get the number of the opponent (the player that is not active)
+     * Gets the number of the opponent for a given player
      *
      * @return the opponent number (position in the players list)
      */
-    private int getOpponentNumber() {
-        return activePlayer == 0 ? 1 : 0;
+    private int getOpponent(int player) {
+        return player == 0 ? 1 : 0;
     }
 
     /**
@@ -252,7 +270,7 @@ public class Game {
      * @return true if the house index belongs to the player's opponent
      */
     private boolean isOpposingHouse(int houseIndex) {
-        int opponent = getOpponentNumber();
+        int opponent = getOpponent(activePlayer);
         for (int i = 0; i < GameBoard.N_HOUSES_PER_PLAYER; i++) {
             if (houseIndex == opponent * GameBoard.N_HOUSES_PER_PLAYER + i) return true;
         }

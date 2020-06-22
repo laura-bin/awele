@@ -5,8 +5,9 @@ import java.util.Random;
 
 public class EasyPlayer implements VirtualPlayer {
 
-    public int pickHouseForSowing(List<Integer> eligibleHouses) {
+    public int pickHouseForSowing(Game game) {
         Random r = new Random();
+        List<Integer> eligibleHouses = game.getEligibleHouseNumbers(PlayerType.VIRTUAL.ordinal());
         int pickedHouse = eligibleHouses.get(r.nextInt(eligibleHouses.size()));
         return pickedHouse;
     }
