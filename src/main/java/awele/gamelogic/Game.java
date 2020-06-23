@@ -84,6 +84,13 @@ public class Game {
         return start;
     }
 
+    /**
+     * @return the virtual player
+     */
+    public VirtualPlayer getVirtualPlayer() {
+        return virtualPlayer;
+    }
+
     public int getVirtualPlayerPickedHouse() {
         return virtualPlayer.pickHouseForSowing(this);
     }

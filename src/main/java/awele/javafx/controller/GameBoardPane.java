@@ -1,8 +1,6 @@
 package awele.javafx.controller;
 
-import awele.gamelogic.Game;
-import awele.gamelogic.GameStatus;
-import awele.gamelogic.PlayerType;
+import awele.gamelogic.*;
 import awele.model.GameBoard;
 import awele.model.Score;
 import awele.services.Database;
@@ -324,23 +322,17 @@ public class GameBoardPane implements Initializable {
     /**
      * End animation :
      * - displays the winner
-     * - asks for saving score
+     * - displays a dialog to ask the human player's name
+     * - logs infos about the game in the database
      */
     private void end() {
         runLater(() -> {
             removeHousesStyles();
             displayBoard();
             Utils.setText(playerMessage, game.getStatus().getMessage());
-
-
-            TextInputDialog inputDialog = new TextInputDialog("default player");
-            //inputDialog.getDialogPane().getScene().getStylesheets().add()
-            inputDialog.setTitle("Name selection");
-            inputDialog.setHeaderText("Choose your name");
-            String humanPlayerName = inputDialog.showAndWait()
-                    .orElse("default player");
-
-            String virtualPlayerName = "Machine";
+            String humanPlayerName = getHumanName();
+            String virtualPlayerName = "Machine (normal mode)";
+            if (game.getVirtualPlayer() instanceof HardPlayer) virtualPlayerName = "Machine (hard mode)";
 
             Score score = new Score();
             score.setDate(Timestamp.valueOf(game.getStart()));
@@ -352,8 +344,24 @@ public class GameBoardPane implements Initializable {
             score.setWinnerName(game.getStatus() == GameStatus.END_WIN ? humanPlayerName : virtualPlayerName);
 
             Database.getInstance().insertScore(score);
-            // TODO -> scores / go back ?
         });
+    }
+
+    /**
+     * Displays a dialog to ask his name to the human player
+     *
+     * @return the player name or default value "human"
+     */
+    private String getHumanName() {
+        String defaultName = "human";
+        TextInputDialog inputDialog = new TextInputDialog(defaultName);
+        inputDialog.getDialogPane().getScene().getStylesheets().add("/awele/view/dialog.css");
+        inputDialog.getDialogPane().lookupButton(ButtonType.CANCEL).setVisible(false);
+        inputDialog.setHeaderText(null);
+        inputDialog.setGraphic(null);
+        inputDialog.setTitle("Score log infos");
+        inputDialog.setContentText("Enter your name:");
+        return inputDialog.showAndWait().orElse(defaultName);
     }
 
     /**
