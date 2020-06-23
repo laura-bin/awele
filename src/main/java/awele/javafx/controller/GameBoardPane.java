@@ -362,8 +362,7 @@ public class GameBoardPane implements Initializable {
         inputDialog.setGraphic(null);
         inputDialog.setTitle("Score log infos");
         inputDialog.setContentText("Enter your name:");
-        name = inputDialog.showAndWait().orElse(defaultName);
-        return name.isEmpty() ? defaultName : name;
+        return inputDialog.showAndWait().filter(String::isEmpty).orElse(defaultName);
     }
 
     /**
