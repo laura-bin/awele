@@ -2,7 +2,9 @@ package awele.gamelogic;
 
 import awele.model.GameBoard;
 
+import java.sql.Timestamp;
 import java.time.Duration;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -12,7 +14,7 @@ public class Game {
     private VirtualPlayer virtualPlayer;    // virtual player (easy or hard)
     private int activePlayer;               // active player number : 0 for human player and 1 for virtual player
     private GameStatus status;              // game status in progress / end
-    private long start;                     // time at which the game started
+    private LocalDateTime start;            // time at which the game started
     private Duration duration;              // game duration
 
     /**
@@ -22,7 +24,7 @@ public class Game {
      * @param humanStarts does the human player wants to start (boolean)
      */
     public Game(DifficultyLevel difficulty, boolean humanStarts) {
-        this.start = System.nanoTime();
+        this.start = LocalDateTime.now();
         this.board = new GameBoard();
 
         switch (difficulty) {
@@ -74,8 +76,12 @@ public class Game {
      * @return the game duration
      */
     public Duration getDuration() {
-        if (duration == null) return Duration.ofNanos(System.nanoTime() - start);
+        if (duration == null) return Duration.between(start, LocalDateTime.now());
         else return duration;
+    }
+
+    public LocalDateTime getStart() {
+        return start;
     }
 
     public int getVirtualPlayerPickedHouse() {
@@ -236,7 +242,7 @@ public class Game {
      */
     public void end(GameStatus status) {
         this.status = status;
-        this.duration = Duration.ofNanos(System.nanoTime() - start);
+        this.duration = Duration.between(start, LocalDateTime.now());
     }
 
     /**
@@ -319,5 +325,4 @@ public class Game {
     private int convertHouseNumberToHouseIndex(int houseNumber, int player) {
         return houseNumber + player * GameBoard.N_HOUSES_PER_PLAYER - 1;
     }
-
 }
