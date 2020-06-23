@@ -1,6 +1,7 @@
 package awele.services;
 
 import awele.model.Score;
+import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
 import java.sql.*;
@@ -12,10 +13,13 @@ public class Database {
 
     private static Database DB;
 
+    private final ObservableList<Score> scores = FXCollections.observableArrayList();
+
     /**
      * Private constructor for Singleton pattern
      */
     private Database() {
+        refreshScores();
     }
 
     /**
@@ -26,6 +30,13 @@ public class Database {
             DB = new Database();
         }
         return DB;
+    }
+
+    /**
+     * @return the observable list of scores
+     */
+    public ObservableList<Score> getScores() {
+        return scores;
     }
 
     /**
@@ -86,16 +97,16 @@ public class Database {
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
+        refreshScores();
     }
 
     /**
      * Get the scores ordered by human player score (best score before)
      * then duration (shortest before) then date time (most recent before)
      * and add them to the observable list of scores
-     *
-     * @param scores observable list of scores
      */
-    public void getScores(ObservableList<Score> scores) {
+    public void refreshScores() {
+        scores.clear();
         try (Connection connection = getConnection()) {
             try (PreparedStatement getScoreStatement = connection.prepareStatement(
                     "SELECT * FROM score ORDER BY human_player_score DESC, duration ASC, date_time DESC;")) {

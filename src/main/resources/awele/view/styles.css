@@ -125,5 +125,5 @@ Button:focused {
 
 .score-table .number-column {
     -fx-alignment: CENTER-RIGHT;
-    -fx-pref-width: 136;
+    -fx-pref-width: 130;
 }

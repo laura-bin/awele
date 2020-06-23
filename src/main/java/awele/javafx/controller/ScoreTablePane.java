@@ -41,7 +41,7 @@ public class ScoreTablePane implements Initializable {
         winnerColumn.setCellValueFactory(new PropertyValueFactory<>("winnerName"));
         humanScoreColumn.setCellValueFactory(new PropertyValueFactory<>("humanPlayerScore"));
         machineScoreColumn.setCellValueFactory(new PropertyValueFactory<>("virtualPlayerScore"));
-        Database.getInstance().getScores(scoreTable.getItems());
+        scoreTable.setItems(Database.getInstance().getScores());
     }
 
     /**
