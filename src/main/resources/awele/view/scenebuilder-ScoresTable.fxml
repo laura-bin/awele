@@ -12,14 +12,15 @@
 </userData>x-->
     <children>
         <Label alignment="CENTER" contentDisplay="CENTER" maxWidth="1.7976931348623157E308" styleClass="window-title" text="SCORES" textAlignment="CENTER" VBox.vgrow="NEVER" />
-        <TableView maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="300.0" VBox.vgrow="ALWAYS">
+        <TableView fx:id="scoreTable" styleClass="score-table" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="300.0" VBox.vgrow="ALWAYS">
             <columns>
-                <TableColumn prefWidth="75.0" text="Date" />
-                <TableColumn prefWidth="75.0" text="Score" />
-                <TableColumn prefWidth="75.0" text="Player" />
-                <TableColumn prefWidth="75.0" text="Duration" />
+                <TableColumn fx:id="dateColumn" styleClass="text-column" text="Date" />
+                <TableColumn fx:id="durationColumn" styleClass="number-column" text="Duration" />
+                <TableColumn fx:id="winnerColumn" styleClass="text-column" text="Winner" />
+                <TableColumn fx:id="humanScoreColumn" styleClass="number-column" text="Human score" />
+                <TableColumn fx:id="machineScoreColumn" styleClass="number-column" text="Machine score" />
             </columns>
         </TableView>
-        <Button maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#goBack" text="GO_BACK" VBox.vgrow="NEVER" />
+        <Button fx:id="goBackButton" styleClass="large-button" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#goBack" text="GO_BACK" VBox.vgrow="NEVER" />
     </children>
 </VBox>

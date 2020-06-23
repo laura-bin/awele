@@ -106,8 +106,8 @@
             <CheckBox fx:id="playableHouseHint" styleClass="board-message" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" nodeOrientation="RIGHT_TO_LEFT" text="Show eligible houses" />
          </children>
       </HBox>
-        <Button fx:id="goBackButton" styleClass="board-button" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#goBack" text="GO_BACK" />
-        <Button fx:id="quitButton"  styleClass="board-button" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#quit" text="QUIT" />
+        <Button fx:id="goBackButton" styleClass="large-button" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#goBack" text="GO_BACK" />
+        <Button fx:id="quitButton" styleClass="large-button" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#quit" text="QUIT" />
     </children>
     <padding>
         <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />

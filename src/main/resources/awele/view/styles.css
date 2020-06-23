@@ -33,7 +33,13 @@ Button:focused {
     -fx-font-size: 16px;
 }
 
-/* Board */
+.large-button {
+    -fx-min-height: 4ex;
+    -fx-font-size: 18px;
+    -fx-font-family: monospace Monospaced;
+}
+
+/* BOARD */
 
 .game-duration {
     -fx-font-family: monospace Monospaced;
@@ -85,9 +91,6 @@ Button:focused {
     -fx-border-color: transparent;
 }
 
-
-
-
 .picked {
     -fx-background-color: #4f9a94;
 }
@@ -104,13 +107,23 @@ Button:focused {
     -fx-background-color: #82ada9;
 }
 
-.board-button {
-    -fx-min-height: 4ex;
-    -fx-font-size: 18px;
-    -fx-font-family: monospace Monospaced;
-}
-
 .board-message {
     -fx-font-size: 14px;
     -fx-font-family: monospace Monospaced;
+}
+
+/* SCORES */
+
+.score-table {
+    -fx-font-size: 14px;
+    -fx-font-family: monospace Monospaced;
+}
+
+.score-table .text-column {
+    -fx-pref-width: 210;
+}
+
+.score-table .number-column {
+    -fx-alignment: CENTER-RIGHT;
+    -fx-pref-width: 136;
 }

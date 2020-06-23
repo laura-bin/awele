@@ -4,18 +4,18 @@ import awele.gamelogic.Game;
 import awele.gamelogic.GameStatus;
 import awele.gamelogic.PlayerType;
 import awele.model.GameBoard;
+import awele.model.Score;
+import awele.services.Database;
 import awele.ui.GameMessage;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
-import javafx.scene.control.Button;
-import javafx.scene.control.CheckBox;
-import javafx.scene.control.Label;
-import javafx.scene.control.Labeled;
+import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
 
 import java.net.URL;
+import java.sql.Timestamp;
 import java.time.Duration;
 import java.util.*;
 import java.util.concurrent.Executors;
@@ -331,6 +331,27 @@ public class GameBoardPane implements Initializable {
             removeHousesStyles();
             displayBoard();
             Utils.setText(playerMessage, game.getStatus().getMessage());
+
+
+            TextInputDialog inputDialog = new TextInputDialog("default player");
+            //inputDialog.getDialogPane().getScene().getStylesheets().add()
+            inputDialog.setTitle("Name selection");
+            inputDialog.setHeaderText("Choose your name");
+            String humanPlayerName = inputDialog.showAndWait()
+                    .orElse("default player");
+
+            String virtualPlayerName = "Machine";
+
+            Score score = new Score();
+            score.setDate(Timestamp.valueOf(game.getStart()));
+            score.setDuration(Math.toIntExact(game.getDuration().toSeconds()));
+            score.setHumanPlayerName(humanPlayerName);
+            score.setVirtualPlayerName(virtualPlayerName);
+            score.setHumanPlayerScore(game.getGameBoard().getStockByPlayer(PlayerType.HUMAN));
+            score.setVirtualPlayerScore(game.getGameBoard().getStockByPlayer(PlayerType.VIRTUAL));
+            score.setWinnerName(game.getStatus() == GameStatus.END_WIN ? humanPlayerName : virtualPlayerName);
+
+            Database.getInstance().insertScore(score);
             // TODO -> scores / go back ?
         });
     }
