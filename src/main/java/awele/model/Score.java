@@ -17,6 +17,10 @@ public class Score {
     private int virtualPlayerScore;
     private String winnerName;
 
+    public void setId(int id) {
+        this.id = id;
+    }
+
     public Timestamp getDate() {
         return date;
     }
