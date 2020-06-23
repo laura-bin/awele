@@ -330,7 +330,7 @@ public class GameBoardPane implements Initializable {
             removeHousesStyles();
             displayBoard();
             Utils.setText(playerMessage, game.getStatus().getMessage());
-            String humanPlayerName = getHumanName();
+            String humanPlayerName = getHumanName("human");
             String virtualPlayerName = "Machine (normal mode)";
             if (game.getVirtualPlayer() instanceof HardPlayer) virtualPlayerName = "Machine (hard mode)";
 
@@ -352,16 +352,18 @@ public class GameBoardPane implements Initializable {
      *
      * @return the player name or default value "human"
      */
-    private String getHumanName() {
-        String defaultName = "human";
+    private String getHumanName(String defaultName) {
+        String name;
         TextInputDialog inputDialog = new TextInputDialog(defaultName);
         inputDialog.getDialogPane().getScene().getStylesheets().add("/awele/view/dialog.css");
         inputDialog.getDialogPane().lookupButton(ButtonType.CANCEL).setVisible(false);
+        ((Button)inputDialog.getDialogPane().lookupButton(ButtonType.OK)).setDefaultButton(false);
         inputDialog.setHeaderText(null);
         inputDialog.setGraphic(null);
         inputDialog.setTitle("Score log infos");
         inputDialog.setContentText("Enter your name:");
-        return inputDialog.showAndWait().orElse(defaultName);
+        name = inputDialog.showAndWait().orElse(defaultName);
+        return name.isEmpty() ? defaultName : name;
     }
 
     /**
