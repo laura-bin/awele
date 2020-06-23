@@ -98,7 +98,7 @@ public class Database {
     public void getScores(ObservableList<Score> scores) {
         try (Connection connection = getConnection()) {
             try (PreparedStatement getScoreStatement = connection.prepareStatement(
-                    "SELECT * FROM score ORDER BY human_player_score DESC, duration ASC, date_time ASC;")) {
+                    "SELECT * FROM score ORDER BY human_player_score DESC, duration ASC, date_time DESC;")) {
                 ResultSet result = getScoreStatement.executeQuery();
                 while (result.next()) {
                     Score score = new Score();
