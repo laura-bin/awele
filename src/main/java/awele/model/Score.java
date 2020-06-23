@@ -4,6 +4,7 @@ import java.sql.Timestamp;
 
 /**
  * Score model used to log the game results in database
+ * representation of the fields with getters and setters
  */
 public class Score {
 
