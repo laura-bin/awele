@@ -16,9 +16,7 @@ public class AweleApplication extends Application {
         root.getStylesheets().add("/awele/view/styles.css");
         stage.setTitle("AWELE");
         stage.setScene(new Scene(root));
-        stage.setOnCloseRequest(event -> {
-            GameBoardPane.shutdown();
-        });
+        stage.setOnCloseRequest(event -> GameBoardPane.shutdown()); // stop the application on click on the little cross
         stage.show();
     }
 }

@@ -88,6 +88,9 @@ public class RootStack implements Initializable {
         }
     }
 
+    /**
+     * Shuts all the threads down
+     */
     public void quit() {
         Platform.exit();
         GameBoardPane.shutdown();

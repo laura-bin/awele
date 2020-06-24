@@ -8,6 +8,7 @@ import java.util.Comparator;
 import java.util.List;
 
 // http://stephane.ayache.perso.luminy.univ-amu.fr/zoom/cours/Cours/IA_Jeux/IAEtJeux2.pdf
+// https://en.wikipedia.org/wiki/Alpha%E2%80%93beta_pruning
 public class HardPlayer implements VirtualPlayer {
 
     private final int VIRTUAL_PLAYER = 1;
@@ -23,19 +24,22 @@ public class HardPlayer implements VirtualPlayer {
      */
     @Override
     public int pickHouseForSowing(Game game) {
+        long time = System.nanoTime();
+
         MoveNode initialNode = new MoveNode(game.getGameBoard(), 0, 0);
-        MoveNode selectedNode = negamax(initialNode, 8, VIRTUAL_PLAYER);
-        // return negamax(initialNode, 10, BOUNDARY, -BOUNDARY, VIRTUAL_PLAYER);
+        MoveNode selectedNode = minimax(initialNode, 10, VIRTUAL_PLAYER, -BOUNDARY, BOUNDARY);
         System.out.println(String.format("House number : %d - value : %d", selectedNode.getHouse(), selectedNode.getValue()));
+        System.out.println((System.nanoTime() - time) / 1000.0);
+
         return selectedNode.getHouse();
     }
 
     /**
-     * Negamax algorithm with alpha-beta pruning
+     * Minimax algorithm with alpha-beta pruning
      * Move evaluation is based on the number of seeds captured by the player
      * and the win / lose / draw end (lose / draw are eliminated)
      */
-    private MoveNode negamax(MoveNode node, int depth, int player) {
+    private MoveNode minimax(MoveNode node, int depth, int player, int alpha, int beta) {
         Game game = new Game(node.getBoard());
         List<Integer> eligibleHouses = game.getEligibleHouseNumbers(convertToGamePlayer(player));
 
@@ -47,15 +51,32 @@ public class HardPlayer implements VirtualPlayer {
         if (depth > 0 && game.getStatus() == GameStatus.IN_PROGRESS) {
             List<MoveNode> followingNodes = generateFollowingNodes(
                     game.getGameBoard(), player, eligibleHouses, node.getHouse(), depth);
-            MoveNode bestMove = followingNodes.get(0);
-            for (int i = 1; i < followingNodes.size(); i++) {
-                MoveNode nextMove = negamax(followingNodes.get(i), depth - 1, -player);
-                // keep the max valued move for the virtual player and the min valued for the human
-                bestMove = player * bestMove.getValue() > player * nextMove.getValue() ? bestMove : nextMove;
+            // followingNodes.get(0);
+
+            MoveNode bestMove;
+
+            if (player == VIRTUAL_PLAYER) {
+                // max evaluation
+                bestMove = new MoveNode(game.getGameBoard(), 0, -BOUNDARY);
+                for (MoveNode followingNode : followingNodes) {
+                    MoveNode nextMove = minimax(followingNode, depth - 1, -player, alpha, beta);
+                    bestMove = bestMove.getValue() > nextMove.getValue() ? bestMove : nextMove;
+                    if (bestMove.getValue() >= beta) break; // beta break
+                    alpha = Math.max(alpha, bestMove.getValue());
+                }
+            } else {
+                // min evaluation
+                bestMove = new MoveNode(game.getGameBoard(), 0, BOUNDARY);
+
+                for (MoveNode followingNode : followingNodes) {
+                    MoveNode nextMove = minimax(followingNode, depth - 1, -player, alpha, beta);
+                    bestMove = bestMove.getValue() < nextMove.getValue() ? bestMove : nextMove;
+                    if (alpha >= bestMove.getValue()) break; // alpha break
+                    beta = Math.min(beta, bestMove.getValue());
+                }
             }
             return bestMove;
         }
-
         return node;
     }
 
@@ -77,7 +98,7 @@ public class HardPlayer implements VirtualPlayer {
             int playerNumber = convertToGamePlayer(player);
             game.captureSeedsFromHouseIndex(game.sowSeeds(house, playerNumber), playerNumber);
             // set the value depending on the player's stock and with higher value for immediate gain
-            int value = game.getGameBoard().getStockByPlayer(convertToGamePlayer(player)) * depth;
+            int value = game.getGameBoard().getStockByPlayer(convertToGamePlayer(player));// * depth;
             switch (game.getStatus()) {
                 case END_WIN:
                     value = BOUNDARY;
@@ -90,8 +111,6 @@ public class HardPlayer implements VirtualPlayer {
                     break;
             }
             MoveNode newNode = new MoveNode(game.getGameBoard(), originalHouse == 0 ? house : originalHouse, value);
-            // c.displayBoard(game.getGameBoard());
-            // System.out.println(String.format("player : %d - value : %d", player, value));
             followingNodes.add(newNode);
         }
 
