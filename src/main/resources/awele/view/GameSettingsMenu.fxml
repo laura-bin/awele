@@ -22,7 +22,7 @@
                       <ToggleGroup fx:id="difficulty" />
                   </toggleGroup>
               </RadioButton>
-              <RadioButton disable="true" fx:id="hardMode" styleClass="settings-menu" maxWidth="1.7976931348623157E308" mnemonicParsing="false" text="HARD_MODE" toggleGroup="$difficulty" />
+              <RadioButton fx:id="hardMode" styleClass="settings-menu" maxWidth="1.7976931348623157E308" mnemonicParsing="false" text="HARD_MODE" toggleGroup="$difficulty" />
          </children>
       </VBox>
         <CheckBox fx:id="wantsToStart" styleClass="settings-menu" maxWidth="1.7976931348623157E308" mnemonicParsing="false" selected="true" text="PLAY_FIRST">

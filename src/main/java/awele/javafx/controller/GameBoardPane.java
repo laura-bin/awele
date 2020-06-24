@@ -1,6 +1,9 @@
 package awele.javafx.controller;
 
-import awele.gamelogic.*;
+import awele.gamelogic.Game;
+import awele.gamelogic.GameStatus;
+import awele.gamelogic.HardPlayer;
+import awele.gamelogic.PlayerType;
 import awele.model.GameBoard;
 import awele.model.Score;
 import awele.services.Database;
@@ -186,7 +189,7 @@ public class GameBoardPane implements Initializable {
         int player = game.getActivePlayerNumber();
 
         setDisableHumanPlayerHouses();
-        game.sowSeeds(pickedHouse, game.getActivePlayerNumber());
+        game.sowSeeds(pickedHouse, player);
         houseNode.getStyleClass().add("picked");
         houseNode.setText("0");
         sowSeeds(pickedHouse, player, pickedHouse, player, nSowing);
@@ -206,7 +209,7 @@ public class GameBoardPane implements Initializable {
         if (nSowing == 0) {
             // capture seeds and if the last house updated belongs to the opponent and the capture doesn't starved him,
             // launch the animation
-            if (previousPlayer != game.getActivePlayerNumber() && game.captureSeeds(previousHouse, previousPlayer) > 0) {
+            if (previousPlayer != game.getActivePlayerNumber() && game.captureSeedsFromHouseNumber(previousHouse, previousPlayer) > 0) {
                 runLater(() -> {
                     Labeled stockNode = getHouseNode(GameBoard.N_HOUSES_PER_PLAYER + 1, game.getActivePlayerNumber());
                     captureSeeds(previousHouse, previousPlayer, stockNode);
@@ -357,7 +360,7 @@ public class GameBoardPane implements Initializable {
         TextInputDialog inputDialog = new TextInputDialog(defaultName);
         inputDialog.getDialogPane().getScene().getStylesheets().add("/awele/view/dialog.css");
         inputDialog.getDialogPane().lookupButton(ButtonType.CANCEL).setVisible(false);
-        ((Button)inputDialog.getDialogPane().lookupButton(ButtonType.OK)).setDefaultButton(false);
+        ((Button) inputDialog.getDialogPane().lookupButton(ButtonType.OK)).setDefaultButton(false);
         inputDialog.setHeaderText(null);
         inputDialog.setGraphic(null);
         inputDialog.setTitle("Score log infos");

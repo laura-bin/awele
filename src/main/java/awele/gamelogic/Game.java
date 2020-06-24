@@ -2,7 +2,6 @@ package awele.gamelogic;
 
 import awele.model.GameBoard;
 
-import java.sql.Timestamp;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -14,7 +13,7 @@ public class Game {
     private VirtualPlayer virtualPlayer;    // virtual player (easy or hard)
     private int activePlayer;               // active player number : 0 for human player and 1 for virtual player
     private GameStatus status;              // game status in progress / end
-    private LocalDateTime start;            // time at which the game started
+    private final LocalDateTime start;      // time at which the game started
     private Duration duration;              // game duration
 
     /**
@@ -41,17 +40,22 @@ public class Game {
         this.status = GameStatus.IN_PROGRESS;
     }
 
-
+    /**
+     * Constructor
+     *
+     * @param board GameBoard
+     */
     public Game(GameBoard board) {
-        this.board = board;
+        this.board = board.copy();
         this.status = GameStatus.IN_PROGRESS;
+        this.start = LocalDateTime.now();
     }
 
     /**
      * @return the GameBoard board associated to the game
      */
     public GameBoard getGameBoard() {
-        return this.board;
+        return board.copy();
     }
 
     /**
@@ -129,7 +133,7 @@ public class Game {
 
 
     /**
-     * Sows seeds and capture opponent seeds if possible
+     * Sows seeds
      *
      * @param fromHouseNumber house number picked by the player from which to start sowing
      * @return the last house index updated
@@ -160,8 +164,8 @@ public class Game {
      * @param fromHouseIndex last house index where a seed was sowed
      * @return the number of seeds captured
      */
-    public int captureSeeds(int fromHouseIndex) {
-        int opponent = getOpponent(activePlayer);
+    public int captureSeedsFromHouseIndex(int fromHouseIndex, int player) {
+        int opponent = getOpponent(player);
         int seedsCaptured = 0;
 
         // does the last house belong to the opponent ?
@@ -186,7 +190,7 @@ public class Game {
             // if the opponent isn't starved by the capture, the capture is allowed
             if (!isStarved(opponent, newHouses)) {
                 board.updateHouses(newHouses);
-                board.addToStock(activePlayer, seedsCaptured);
+                board.addToStock(player, seedsCaptured);
 
                 // check if there is a winner
                 if (board.getStockByPlayer(PlayerType.HUMAN) > 24) end(GameStatus.END_WIN);
@@ -204,8 +208,8 @@ public class Game {
      * @param lastHouse  last house updated
      * @param lastPlayer player who owns the last house update
      */
-    public int captureSeeds(int lastHouse, int lastPlayer) {
-        return captureSeeds(convertHouseNumberToHouseIndex(lastHouse, lastPlayer));
+    public int captureSeedsFromHouseNumber(int lastHouse, int lastPlayer) {
+        return captureSeedsFromHouseIndex(convertHouseNumberToHouseIndex(lastHouse, lastPlayer), activePlayer);
     }
 
     /**

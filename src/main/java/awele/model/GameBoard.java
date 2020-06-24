@@ -35,9 +35,22 @@ public class GameBoard {
         for (int i = 0; i < N_PLAYERS; i++) this.stocks.add(0);
     }
 
-    public GameBoard(List<Integer> houses, List<Integer> stocks) {
+    /**
+     * Private constructor for copy
+     *
+     * @param houses houses list
+     * @param stocks stocks list
+     */
+    private GameBoard(List<Integer> houses, List<Integer> stocks) {
         this.houses = houses;
         this.stocks = stocks;
+    }
+
+    /**
+     * @return a copy of the game board
+     */
+    public GameBoard copy() {
+        return new GameBoard(new ArrayList<>(houses), new ArrayList<>(stocks));
     }
 
     /**
@@ -86,13 +99,6 @@ public class GameBoard {
      */
     public int getStartIndexForPlayer(int player) {
         return player * N_HOUSES_PER_PLAYER;
-    }
-
-    /**
-     * @return the list of stocks
-     */
-    public List<Integer> getStocks() {
-        return stocks;
     }
 
     /**

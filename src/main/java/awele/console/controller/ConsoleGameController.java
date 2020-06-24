@@ -95,7 +95,7 @@ public class ConsoleGameController {
                 }
 
                 lastHouseIndex = game.sowSeeds(pickedHouse, game.getActivePlayerNumber());
-                game.captureSeeds(lastHouseIndex);
+                game.captureSeedsFromHouseIndex(lastHouseIndex, game.getActivePlayerNumber());
                 game.switchActivePlayer();
                 displayBoard(game.getGameBoard());
             }

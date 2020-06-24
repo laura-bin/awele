@@ -1,7 +1,5 @@
 package awele.gamelogic;
 
-import java.util.List;
-
 public interface VirtualPlayer {
 
     /**

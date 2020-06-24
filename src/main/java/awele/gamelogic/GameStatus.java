@@ -25,4 +25,5 @@ public enum GameStatus {
     public GameMessage getMessage() {
         return message;
     }
+
 }
