@@ -38,6 +38,15 @@ public class GameBoardPane implements Initializable {
     private static final ScheduledExecutorService executor = Executors.newSingleThreadScheduledExecutor();
     private static final long ANIMATION_DELAY = 600; // time delay for the game animations in milliseconds
 
+    /**
+     * Shuts the thread pool used for animations down.
+     *
+     * This panel will stop working after calling this method.
+     */
+    public static void shutdown() {
+        executor.shutdown();
+    }
+
     @FXML
     private Label duration;
     @FXML

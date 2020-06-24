@@ -2,6 +2,7 @@ package awele.javafx.controller;
 
 import awele.gamelogic.DifficultyLevel;
 import awele.gamelogic.Game;
+import javafx.application.Platform;
 import javafx.collections.ObservableList;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
@@ -88,8 +89,7 @@ public class RootStack implements Initializable {
     }
 
     public void quit() {
-        // TODO
-        System.exit(0);
+        Platform.exit();
+        GameBoardPane.shutdown();
     }
-
 }

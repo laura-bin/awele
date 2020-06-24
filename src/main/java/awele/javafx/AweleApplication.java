@@ -1,5 +1,6 @@
 package awele.javafx;
 
+import awele.javafx.controller.GameBoardPane;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -15,6 +16,9 @@ public class AweleApplication extends Application {
         root.getStylesheets().add("/awele/view/styles.css");
         stage.setTitle("AWELE");
         stage.setScene(new Scene(root));
+        stage.setOnCloseRequest(event -> {
+            GameBoardPane.shutdown();
+        });
         stage.show();
     }
 }
