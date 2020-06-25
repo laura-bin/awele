@@ -23,6 +23,7 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
+import java.util.function.Predicate;
 
 /* Grid Pane indexes
 
@@ -372,8 +373,7 @@ public class GameBoardPane implements Initializable {
         inputDialog.setGraphic(null);
         inputDialog.setTitle("Score log infos");
         inputDialog.setContentText("Enter your name:");
-        chosenName = inputDialog.showAndWait().orElse(defaultName);
-        return chosenName.isEmpty() ? defaultName : chosenName;
+        return inputDialog.showAndWait().filter(Predicate.not(String::isEmpty)).orElse(defaultName);
     }
 
     /**
