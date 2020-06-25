@@ -36,7 +36,7 @@ import java.util.concurrent.TimeUnit;
 public class GameBoardPane implements Initializable {
 
     private static final ScheduledExecutorService executor = Executors.newSingleThreadScheduledExecutor();
-    private static final long ANIMATION_DELAY = 0; // time delay for the game animations in milliseconds
+    private static final long ANIMATION_DELAY = 600; // time delay for the game animations in milliseconds
 
     /**
      * Shuts the thread pool used for animations down
