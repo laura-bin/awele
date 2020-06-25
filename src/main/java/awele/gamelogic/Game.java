@@ -131,7 +131,6 @@ public class Game {
         return eligibleHouseNumbers;
     }
 
-
     /**
      * Sows seeds
      *

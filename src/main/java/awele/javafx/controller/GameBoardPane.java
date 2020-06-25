@@ -36,7 +36,7 @@ import java.util.concurrent.TimeUnit;
 public class GameBoardPane implements Initializable {
 
     private static final ScheduledExecutorService executor = Executors.newSingleThreadScheduledExecutor();
-    private static final long ANIMATION_DELAY = 600; // time delay for the game animations in milliseconds
+    private static final long ANIMATION_DELAY = 0; // time delay for the game animations in milliseconds
 
     /**
      * Shuts the thread pool used for animations down
@@ -363,6 +363,7 @@ public class GameBoardPane implements Initializable {
      */
     private String getHumanName() {
         String defaultName = "human";
+        String chosenName;
         TextInputDialog inputDialog = new TextInputDialog(defaultName);
         inputDialog.getDialogPane().getScene().getStylesheets().add("/awele/view/dialog.css");
         inputDialog.getDialogPane().lookupButton(ButtonType.CANCEL).setVisible(false);
@@ -371,7 +372,8 @@ public class GameBoardPane implements Initializable {
         inputDialog.setGraphic(null);
         inputDialog.setTitle("Score log infos");
         inputDialog.setContentText("Enter your name:");
-        return inputDialog.showAndWait().filter(String::isEmpty).orElse(defaultName);
+        chosenName = inputDialog.showAndWait().orElse(defaultName);
+        return chosenName.isEmpty() ? defaultName : chosenName;
     }
 
     /**

@@ -28,9 +28,6 @@ public class HardPlayer implements VirtualPlayer {
 
         MoveNode initialNode = new MoveNode(game.getGameBoard(), 0, 0);
         MoveNode selectedNode = minimax(initialNode, 10, VIRTUAL_PLAYER, -BOUNDARY, BOUNDARY);
-        System.out.println(String.format("House number : %d - value : %d", selectedNode.getHouse(), selectedNode.getValue()));
-        System.out.println((System.nanoTime() - time) / 1000.0);
-
         return selectedNode.getHouse();
     }
 
@@ -51,31 +48,28 @@ public class HardPlayer implements VirtualPlayer {
         if (depth > 0 && game.getStatus() == GameStatus.IN_PROGRESS) {
             List<MoveNode> followingNodes = generateFollowingNodes(
                     game.getGameBoard(), player, eligibleHouses, node.getHouse(), depth);
-            // followingNodes.get(0);
-
-            MoveNode bestMove;
 
             if (player == VIRTUAL_PLAYER) {
                 // max evaluation
-                bestMove = new MoveNode(game.getGameBoard(), 0, -BOUNDARY);
+                MoveNode bestMove = new MoveNode(game.getGameBoard(), 0, -BOUNDARY);
                 for (MoveNode followingNode : followingNodes) {
                     MoveNode nextMove = minimax(followingNode, depth - 1, -player, alpha, beta);
                     bestMove = bestMove.getValue() > nextMove.getValue() ? bestMove : nextMove;
                     if (bestMove.getValue() >= beta) break; // beta break
                     alpha = Math.max(alpha, bestMove.getValue());
                 }
+                return bestMove;
             } else {
                 // min evaluation
-                bestMove = new MoveNode(game.getGameBoard(), 0, BOUNDARY);
-
+                MoveNode bestMove = new MoveNode(game.getGameBoard(), 0, BOUNDARY);
                 for (MoveNode followingNode : followingNodes) {
                     MoveNode nextMove = minimax(followingNode, depth - 1, -player, alpha, beta);
                     bestMove = bestMove.getValue() < nextMove.getValue() ? bestMove : nextMove;
                     if (alpha >= bestMove.getValue()) break; // alpha break
                     beta = Math.min(beta, bestMove.getValue());
                 }
+                return bestMove;
             }
-            return bestMove;
         }
         return node;
     }
